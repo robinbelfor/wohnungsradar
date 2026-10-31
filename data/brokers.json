@@ -12,38 +12,29 @@
   ],
   "enabled": true,
   "priority": 90,
-  "recipe": "Stand 31.10.2026: Seite 1 und 2 nur Kauf, Seite 3 nur Haus und Büro als Miete, Seite 4 enthält 23 Wien-Mietwohnungen (Karten 1 bis 23; 24 Büro, 25 Parken, 26 Kauf). Detail-IDs = letzte Zahl der URL (justimmoId). 17309782: Detailseite nicht abrufbar (URL nicht auf Allowlist), daher nur in seen_ids.",
-  "last_run": "2026-10-31T15:20:18Z",
-  "recipe_updated": "2026-10-31T15:20:18Z",
+  "recipe": "Stand 31.10.2026: Mietliste ist Seite 4 (26 Einträge; Karten 1 bis 23 sind Wien-Mietwohnungen, 24 Büro, 25 Parken, 26 Kauf). Seiten 1 bis 3 sind Kauf bzw. Haus/Büro-Miete; Seite 3 wirkt am Ende abgeschnitten, daher complete false. Detail-ID = letzte Zahl der URL (justimmoId); die Objektnummer auf der Seite weicht ab. 17309782 war diesmal abrufbar (vorher nur seen_ids). 17312176 erscheint in keiner Liste dieses Laufs.",
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "last_fetches": 8,
+  "last_fetches": 13,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {
-   "4783189": "2026-10-29T17:47:24Z",
-   "14213002": "2026-10-29T17:47:24Z",
-   "17161495": "2026-10-29T17:47:24Z",
-   "16933120": "2026-10-29T17:47:24Z",
    "14846541": "2026-10-29T17:47:24Z",
-   "17309782": "2026-10-29T17:47:24Z",
-   "17315917": "2026-10-29T17:47:24Z",
-   "14190406": "2026-10-29T17:47:24Z",
-   "17213908": "2026-10-29T17:47:24Z",
-   "17298298": "2026-10-29T17:47:24Z",
-   "17290246": "2026-10-29T17:47:24Z"
+   "17315917": "2026-10-29T17:47:24Z"
   },
-  "active_count": 15,
+  "active_count": 24,
   "discovery": {
    "rentals_seen": 0,
    "seen_on": [
     "herold"
    ]
   },
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
   "complete_reads": 1,
   "complete_counted_at": "2026-10-29T20:38:47Z"
  },
@@ -208,21 +199,21 @@
     "Confirmed 20 rental apartments in Vienna. Upmarket segment."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-31T09:44:35Z",
   "offers_rentals": true,
   "last_fetches": 2,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 20,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 3,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 4,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "raiffeisen-immobilien",
@@ -253,21 +244,21 @@
     "Confirmed 11 current Vienna rental apartments (1060-1230). EN view: /en/rent-flat-vienna."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-29T17:47:24Z",
   "offers_rentals": true,
   "last_fetches": 1,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {
    "0004007795": "2026-10-29T17:47:24Z"
   },
   "active_count": 11,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "rustler",
@@ -354,21 +345,21 @@
     "Confirmed 14 Vienna rental apartments on the Vienna Miete view. Austria-wide rentals: /de/wohnungen-miete/angebot/19."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-31T15:20:18Z",
   "offers_rentals": true,
-  "last_fetches": 5,
+  "last_fetches": 1,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 14,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 2,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 3,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "oerag",
@@ -379,7 +370,7 @@
    "https://www.oerag.at/s/mietwohnungen-wien/",
    "https://www.oerag.at/s/mietwohnungen-wien/2"
   ],
-  "recipe": "Lauf 2026103114: Liste /s/mietwohnungen-wien/ (24 Inserate) und /2 (23) ergeben 47, das ist die angezeigte Gesamtzahl; Seitenende erreicht. /3 lieferte dieselben 23 Inserate wie /2, daher nicht mehr abrufen. source_id bleibt der URL-Slug; die Detailseite nennt zusätzlich eine Objektnummer (z. B. 109268603). Die bekannte 'wunderbare-3-zimmer-maisonette-...-donauinsel' fehlt in der Liste. Detailpreise können von der Liste abweichen (Erstbezug 1010: Liste 3.998,60 €, Detail 4.299 €); das Detail gilt. Detailbudget 10: je 5 neue von Seite 1 und Seite 2, Rest nur in seen_ids.",
+  "recipe": "Lauf 2026103116: Listen /s/mietwohnungen-wien/ und /2 gelesen, 24 + 23 = 47 (Anzeige 47), Seitenende erreicht, /3 nicht abgerufen. Seite 2 enthält Sammelinserat '2 bis 3-Zimmer-Wohnungen in 1220' (kein Einzelobjekt): nicht in seen_ids. Detail-Budget für neue Inserate von Seite 2 (je 5 von Seite 1 und 2) ausgeschöpft; die übrigen neuen Inserate nur in seen_ids, Erfassung im nächsten Lauf. Die Donauinsel-Maisonette fehlt in der Liste. Detailpreise weichen teils von der Liste ab; das Detail gilt.",
   "enabled": true,
   "priority": 100,
   "discovery": {
@@ -399,40 +390,34 @@
     "Confirmed about 48 Vienna rental objects over 2 pages (24 per page). Also Hausverwaltung. EN: /en/s/apartments-vienna-rent/."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
-  "recipe_updated": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "last_fetches": 14,
+  "last_fetches": 7,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {
-   "2-bis-3-zimmer-wohnungen-in-1220-wien-zu-vermieten": "2026-10-29T17:47:24Z",
-   "2-zimmer-dachgeschosswohnung-mit-grosser-terrasse---erstbezug-zu-mieten-in-1220-wien-dc-flats-2": "2026-10-29T17:47:24Z",
-   "historische-3-zimmer-wohnung-mit-modernem-flair-zu-mieten-in-1190-wien-2": "2026-10-29T17:47:24Z",
    "erstklassige-2-zimmer-wohnung-nahe-millennium-tower-in-1200-wien-zu-mieten": "2026-10-29T17:47:24Z",
    "3-zimmer-maisontte-wohnung-mit-loggia-nahe-millennium-tower-in-1200-wien-zu-mieten": "2026-10-29T17:47:24Z",
    "wohnen-mit-blick-in-den-volksgarten-reprasentativer-5-zimmer-altbautraum-mit-kleinem-balkon-in-prachtvoller-liegenschaft-zu-mieten-1010-wien": "2026-10-29T17:47:24Z",
-   "sonnige-2-zimmer-dachgeschosswohnung-mit-grosser-terrasse---erstbezug-zu-mieten-in-1220-wien-dc-flats": "2026-10-29T17:47:24Z",
    "3-zimmer-wohnung-mit-terrasse-in-ruhelage-sofort-in-1210-wien-zu-mieten": "2026-10-29T17:47:24Z",
    "dc-flats-erstbezug-erstklassig-ausgestattete-wohnung-in-neubauprojekt-in-1220-zu-mieten": "2026-10-29T17:47:24Z",
    "grosszugige-und-moderne-4-zimmer-altbauwohnung-mit-hofseitigem-balkon-zu-mieten-in-1010-wien": "2026-10-29T17:47:24Z",
    "3-zimmer-wohnung-mit-2-badern---erstbezug-in-den-dc-flats-zu-mieten-in-1220-wien": "2026-10-29T17:47:24Z",
-   "2-zimmer-dachgeschosswohnung-mit-grosser-terrasse---erstbezug-zu-mieten-in-1220-wien-dc-flats": "2026-10-29T17:47:24Z",
    "2-zimmer-dachgeschoss-wohnung-m-terrasse-erstbezug-provisionsfrei-zu-mieten-in-1100-wien-oberlaa": "2026-10-29T17:47:24Z",
    "grossartige-2-zimmer-wohnung-mit-terrasse-nahe-strebersdorf-in-1210-wien-zu-mieten": "2026-10-29T17:47:24Z",
    "erstbezug-in-1030-nahe-rochusmarkt": "2026-10-29T17:47:24Z",
    "4-zimmer-wohnung-mit-balkon-provisionsfrei-zu-mieten-in-1110-wien": "2026-10-29T17:47:24Z",
-   "historische-3-zimmer-wohnung-mit-modernem-flair-zu-mieten-in-1190-wien": "2026-10-29T17:47:24Z",
    "3-zimmer-wohnung-mit-2-badern---erstbezug-in-den-dc-flats-zu-mieten-in-1220-wien-2": "2026-10-29T17:47:24Z"
   },
-  "active_count": 30,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 1,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "active_count": 34,
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 2,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "bestreal",
@@ -585,9 +570,10 @@
   "website": "https://www.cpi.co.at",
   "platform": "wordpress-custom (WORX)",
   "list_urls": [
-   "https://www.cpi.co.at/en/immobilien-art/rented-flats/"
+   "https://www.cpi.co.at/en/immobilien-art/rented-flats/",
+   "https://www.cpi.co.at/immobilien-art/mietwohnungen/"
   ],
-  "recipe": "Stand 31.10.2026: Liste 25 Einträge (22 Wohnungen, 3 Stellplätze/Garagen), keine Objekt-IDs, keine Paginierung. Detail-URLs weiterhin client_error (Test: bechardgasse-10-top-8-2, ruedengasse-3-top-21). Spaltenzuordnung der Listenwerte ist uneinheitlich: dieser Lauf las erste Zahl als m², Vorlauf als Preis. Ungeklärt, keine Erfassung bis Details lesbar und ID sichtbar sind.",
+  "recipe": "Stand 31.10.2026 (Reparatur): EN-Liste /en/immobilien-art/rented-flats/ 25 Einträge (22 Whg., 3 Stellplätze); DE-Liste /immobilien-art/mietwohnungen/ 26 Einträge (23 Whg., 3 Stellpl.) mit teils ANDEREN Objekten (z. B. Davidgasse 34, Heinzelmanngasse 13 nur DE) und anderen Preisen für dieselben Tops (Bechardgasse 10 Top 8: EN 1.236,71, DE 1.118,04). /en/immobilien = alle 45 Objekte inkl. Kauf. Keine Paginierung, keine IDs (nur Adress-Slugs). Zahlen unbeschriftet; Filter heißen Fläche/Preis, Reihenfolge im Quelltext vermutlich m² dann €; bei Stellplätzen nur eine Zahl. Detail-URLs EN und DE: client_error. Keine Erfassung, bis Details lesbar sind.",
   "enabled": true,
   "priority": 50,
   "discovery": {
@@ -602,12 +588,12 @@
     "1090; ~22 rental flats (monthly prices) vs ~20 sales; category 'rented flats' = Mietwohnungen (German path likely /immobilien-art/mietwohnungen/). Detail /immobiliensuche/wohnung-...-in-wien-mieten-{i"
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
-  "recipe_updated": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "last_fetches": 3,
-  "consecutive_failures": 3,
-  "last_error": "Detail-URLs (/en/immobilien/<slug>/) liefern client_error: 2 von 2 Versuche in diesem Lauf (Vorlauf 7 von 7). Listenseite gelesen (22 Wohnungen, 3 Stellplätze/Garagen), aber ohne Objekt-IDs; keine Erfassung.",
+  "last_fetches": 5,
+  "consecutive_failures": 4,
+  "last_error": "Detailseiten nicht abrufbar: client_error bei EN (/en/immobilien/giessaufgasse-9-top-5/) und DE (/immobilien/davidgasse-34-top-32-dg/), wie in den Vorläufen. Listen lesbar, aber ohne Objekt-IDs und ohne Spaltenbeschriftung; EN- und DE-Liste widersprechen sich (andere Objekte, andere Preise). Keine E",
   "last_ok": "2026-10-29T17:47:24Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {
@@ -634,7 +620,8 @@
    "bechardgasse-10-top-8-2": "2026-10-29T17:47:24Z",
    "mariahilfer-strasse-208-top-33-dg": "2026-10-29T17:47:24Z"
   },
-  "active_count": 0
+  "active_count": 0,
+  "last_repair": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "decus",
@@ -649,7 +636,7 @@
    "https://www.decus.at/de/immobilien/p/5?f%5Ball%5D%5Bmarketing_type%5D=rent&f%5Ball%5D%5Brealty_type%5D%5B0%5D=2",
    "https://www.decus.at/de/immobilien/p/6?f%5Ball%5D%5Bmarketing_type%5D=rent&f%5Ball%5D%5Brealty_type%5D%5B0%5D=2"
   ],
-  "recipe": "Paginierung uneinheitlich: Letzte Seite wird je nach Abruf als 21 oder 24 angegeben, keine Trefferzahl. Wien-Filter nicht in der URL. Listenseiten 1 bis 6 gelesen (60 Einträge, davon 40 Wien-Mietwohnungen); Folgeseiten nicht gelesen, daher complete=false.",
+  "recipe": "Listenseiten: /de/mietwohnungen (Seite 1), dann /de/immobilien/p/N?f[all][marketing_type]=rent&f[all][realty_type][0]=2 (N=2..6 gelesen, je 10 Karten). Wien-Filter fehlt in der URL, daher Graz, St. Pölten und NÖ-Karten mit PLZ aussortieren. Letzte Seite wird je nach Abruf als 21 oder 24 angegeben, Gesamtzahl unbekannt, daher complete=false. Detail-Objektnummer = ID aus der URL (Detail-JSON nennt abweichende interne Nummer). Einzelne Detailseiten liefern teils client_error, auch nach Wiederholung. Seite 1 hat Doppeleinträge mit Seite 3/4.",
   "enabled": true,
   "priority": 100,
   "discovery": {
@@ -673,22 +660,19 @@
     "Vienna rental listings seen on weekend.at portal (Oct 2026); own website NOT fetched/verified (search budget exhausted). 1010. Website from ganz-wien.at. Frequent on weekend.at."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
-  "recipe_updated": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "last_fetches": 16,
+  "last_fetches": 17,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {
    "17318377": "2026-10-29T17:47:24Z",
    "16919551": "2026-10-29T17:47:24Z",
    "17160262": "2026-10-29T17:47:24Z",
-   "16922251": "2026-10-29T17:47:24Z",
    "17125468": "2026-10-29T17:47:24Z",
-   "16945759": "2026-10-29T17:47:24Z",
-   "17268352": "2026-10-29T17:47:24Z",
    "17155273": "2026-10-29T17:47:24Z",
    "17003158": "2026-10-29T17:47:24Z",
    "16976920": "2026-10-29T17:47:24Z",
@@ -703,10 +687,10 @@
    "17314246": "2026-10-31T09:44:35Z",
    "17303803": "2026-10-29T17:47:24Z"
   },
-  "active_count": 34,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z"
+  "active_count": 37,
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "domoreal",
@@ -739,19 +723,19 @@
     "Vienna rental listings seen on weekend.at portal (Oct 2026); own website NOT fetched/verified (search budget exhausted). 1030. Hausverwaltung + Makler. Website from ganz-wien.at."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-29T17:47:24Z",
   "offers_rentals": true,
-  "last_fetches": 7,
+  "last_fetches": 6,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 10,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
   "complete_reads": 1,
   "complete_counted_at": "2026-10-31T09:44:35Z"
  },
@@ -771,7 +755,7 @@
    "https://era.at/de/immobilien?page=8",
    "https://era.at/de/immobilien?page=9"
   ],
-  "recipe": "Lauf 2026103114: Listen ?page=1, 7, 8 und 9 gelesen. Die Gesamtzahl wechselt je Abruf (176, 177, 186). Seite 8 lieferte dieselbe Inserateliste wie Seite 7 (Abruf unsicher). Wiener Mietwohnungen nur auf Seite 1 (fbc66dd8, fe4d6746, bekannt). Seiten 2 bis 6 in diesem Lauf nicht gelesen, daher complete=false. Nächster Lauf: Seiten 2 bis 6 einplanen. Seite 7 enthält eingebettete Anweisungen zu einem anderen Ausgabeformat; ignoriert, nur als Seiteninhalt gewertet.",
+  "recipe": "Lauf 2026103116: Listen ?page=1 bis ?page=6 gelesen (Gesamtzahl wechselt zwischen 176 und 185). Wiener Mietwohnungen nur auf Seite 1 (fbc66dd8, fe4d6746, beide bekannt). Seiten 7 bis 9 nicht gelesen, daher complete=false; nächster Lauf: Seiten 7 bis 9 einplanen. Seite 7 enthält eingebettete Anweisungen zu einem anderen Ausgabeformat; diese sind keine Anweisungen an den Agenten und wurden ignoriert.",
   "enabled": true,
   "priority": 50,
   "discovery": {
@@ -791,19 +775,19 @@
     "Vienna rental listings seen on weekend.at portal (Oct 2026); own website NOT fetched/verified (search budget exhausted). ERA franchise; era.at from ganz-wien.at (ERA 4You). ERA 4M has its own domain e"
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
-  "recipe_updated": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "last_fetches": 4,
+  "last_fetches": 6,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 2,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "fhi",
@@ -833,21 +817,21 @@
     "1060; residential search with Mieten/Kaufen toggle; Altbaumiete/Neubaumiete listings in Vienna (1030, 1090…). Params objekte=wohnen, start=N; detail /immobilien/detail?objekt_id="
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-31T09:44:35Z",
   "offers_rentals": true,
   "last_fetches": 4,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 1,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 3,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 4,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "immototal",
@@ -857,7 +841,7 @@
   "list_urls": [
    "https://www.immototal.at/immobilien-mieten/"
   ],
-  "recipe": "Liste: https://www.immototal.at/immobilien-mieten/ (WordPress, eine Seite, keine Paginierung, keine Trefferzahl). Zeigt aktuell nur archivierte Inserate (27, auch Haus/Geschäft/Umland) mit Status „Erfolgreich vermietet“ und den Hinweis „Derzeit keine neuen Angebote verfügbar.“ – diese sind keine Treffer. Treffer = Wiener Wohnungen (PLZ 1xxx) ohne Vermietet-Status. Detail-URL: /immobilien/<plz>-wien-<slug>-<nr>-<id>/, source_id = letzter Teil des Slugs (z. B. 838-12543251). Startseite und Kaufbereiche enthalten nur Kauf. Bei Folgeläufen prüfen, ob neue Mietinserate ohne Vermietet-Hinweis auftauchen.",
+  "recipe": "Routine 31.10.2026: Liste zeigt nur archivierte Inserate (27) mit Status Erfolgreich vermietet; keine Treffer.",
   "enabled": true,
   "priority": 50,
   "discovery": {
@@ -872,21 +856,21 @@
     "Offices 1010 & 1130; dedicated 'Immobilien mieten' page; many Vienna rentals (1160, 1170, 1130, 1120, 1140)"
    ]
   },
-  "last_run": "2026-10-31T09:44:35Z",
-  "recipe_updated": "2026-10-29T17:47:24Z",
-  "offers_rentals": true,
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
+  "offers_rentals": false,
   "last_fetches": 1,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T09:44:35Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 0,
-  "prev_ok_reads": 1,
-  "ok_reads": 2,
-  "reads_counted_at": "2026-10-31T09:44:35Z",
-  "complete_reads": 1,
-  "complete_counted_at": "2026-10-31T09:44:35Z"
+  "prev_ok_reads": 2,
+  "ok_reads": 3,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 2,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "jpi",
@@ -973,20 +957,20 @@
     "1150; many Vienna rental flats ('Wohnung zur Miete in 1200 Wien', Frauengasse, Damböckgasse, Leystraße). Listing /en/listings?sort=zipAsc&page=N (justimmo-style)"
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-29T17:47:24Z",
   "last_fetches": 2,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 4,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 3,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 4,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "kubicek",
@@ -1014,20 +998,20 @@
     "1220; 19 listings, 3 rentals incl. 1 in Vienna (loft near Seestadt 1220). Justimmo-type site with Miete button (no URL param visible); sort/page params"
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-31T09:44:35Z",
   "last_fetches": 2,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 2,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 3,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 4,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "mpimmo",
@@ -1055,21 +1039,21 @@
     "1050; apartments page 1 of 3: 2 Vienna rentals (1090, 1130, upscale) vs 8 sales. JUSTIMMO-style"
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-29T17:47:24Z",
   "offers_rentals": true,
   "last_fetches": 3,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 7,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 3,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 4,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "otto",
@@ -1212,7 +1196,7 @@
    "https://www.winegg.at/de/immobiliensuche-wohnung-kaufen/v1-mt:rent-oc:residential-ty:juapo44cbzfapprclpkbkmxswq-re:QVQ5Xyo=-so:relevance,asc/3/",
    "https://www.winegg.at/de/immobiliensuche-wohnung-kaufen/v1-mt:rent-oc:residential-ty:juapo44cbzfapprclpkbkmxswq-re:QVQ5Xyo=-so:relevance,asc/4/"
   ],
-  "recipe": "Stand 31.10.2026: Listen / und /2/ gelesen (je 4 Inserate, Trefferzahl 13). /3/ und /4/ bleiben URL_NOT_ON_ALLOWLIST, nicht wiederholt. WebSearch (allowed_domains winegg.at, www.winegg.at, 'Mietwohnung Wien') lieferte 25535, 18953, 19057, 31273, 18956: alle geprüft, alle Kauf (keine Miete), daher nicht erfasst. Ob die 13 Treffer des Miet-Filters vollständig Miete sind, bleibt offen. 23926 und 23929 nicht in den gelesenen Listen; complete false.",
+  "recipe": "Stand 31.10.2026: Filter 'Mieten' mit 13 Treffern auf 4 Seiten (Seiten 1 bis 3 mit je 4 sichtbaren Inseraten, Seite 4 mit 1). Alle vier Listen-URLs sind diesmal abrufbar (vorher als URL_NOT_ON_ALLOWLIST notiert). Neu: 23930, 23932, 23933 (Troststraße 81, Erstbezug). 39410 Wallgasse: Detail client_error, nächster Lauf erneut versuchen. 30336 fehlt in den Listen, daher complete false. Symbolbilder (z. B. 'Symbolbild-Wohnzimmer') nicht als Galeriefotos übernehmen.",
   "enabled": true,
   "priority": 90,
   "discovery": {
@@ -1234,23 +1218,21 @@
     "Vienna rental listings seen on weekend.at portal (Oct 2026); own website NOT fetched/verified (search budget exhausted). 1010. Website from herold.at. Also a developer (WINEGG Realitäten)."
    ]
   },
-  "last_ok": "2026-10-31T15:20:18Z",
-  "last_run": "2026-10-31T15:20:18Z",
-  "recipe_updated": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "last_fetches": 7,
+  "last_fetches": 9,
   "consecutive_failures": 0,
   "last_error": null,
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {
-   "23930": "2026-10-29T17:47:24Z",
-   "23933": "2026-10-29T17:47:24Z",
-   "23932": "2026-10-29T17:47:24Z"
+   "39410": "2026-10-29T17:47:24Z"
   },
-  "active_count": 10,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
+  "active_count": 13,
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
   "complete_reads": 1,
   "complete_counted_at": "2026-10-29T20:38:47Z"
  },
@@ -1281,21 +1263,21 @@
     "1010 Dr.-Karl-Lueger-Platz 5. 11 Vienna rentals on the Neubauwohnung-Miete view. Also develops projects. Also check /immobilien/mieten/ without the type filter."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-29T17:47:24Z",
   "offers_rentals": true,
   "last_fetches": 1,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 10,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 3,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 4,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "maklerpoint",
@@ -1328,20 +1310,20 @@
     "1100 Columbusgasse 14. Several Vienna rentals (Gesamtmiete) in 1120/1150/1160. Kauf/Miete filter has no URL; rental detail slugs contain 'mieten'."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-31T15:20:18Z",
-  "last_fetches": 9,
+  "last_fetches": 5,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 22,
-  "prev_ok_reads": 2,
-  "ok_reads": 3,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 2,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 3,
+  "ok_reads": 4,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 3,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "teamneunzehn",
@@ -1356,7 +1338,7 @@
    "https://teamneunzehn.at/immobiliensuche/p/5?f%5Ball%5D%5Bmarketing_type%5D=rent&f%5Ball%5D%5Brealty_type%5D%5B0%5D=2",
    "https://teamneunzehn.at/immobiliensuche/p/23?f%5Ball%5D%5Bmarketing_type%5D=rent&f%5Ball%5D%5Brealty_type%5D%5B0%5D=2"
   ],
-  "recipe": "Stand 31.10.2026: Listenseiten 1 bis 9 (Filter Miete, Wohnung) gelesen, 174 Wien-IDs; Seite 9 Umland ausgefiltert. Seiten 10 bis 23 ungelesen. Mehrere Inserate mit identischen Daten unter verschiedenen IDs (Dubletten bei Village im Dritten möglich).",
+  "recipe": "Paginierung zeigt nur Seiten 1-7 und 23 (8-22 nicht verlinkt); Detailbudget reicht nicht fuer Village-Einheiten; viele neue IDs nur in seen_ids.",
   "enabled": true,
   "priority": 100,
   "discovery": {
@@ -1377,13 +1359,13 @@
     "Letting agent for many new-build rental projects (developer group). 15+ Vienna rental projects on page 1 of 2, e.g. Village im Dritten (49 units), Effenbergplatz, Koloniestraße 35. High volume."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
-  "recipe_updated": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "last_fetches": 14,
+  "last_fetches": 12,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {
    "16718500": "2026-10-29T17:47:24Z",
@@ -1401,7 +1383,6 @@
    "17062975": "2026-10-29T17:47:24Z",
    "16718557": "2026-10-29T17:47:24Z",
    "17062972": "2026-10-29T17:47:24Z",
-   "16718497": "2026-10-29T17:47:24Z",
    "16718572": "2026-10-29T17:47:24Z",
    "16992667": "2026-10-29T17:47:24Z",
    "17263135": "2026-10-29T17:47:24Z",
@@ -1462,7 +1443,6 @@
    "17330308": "2026-10-29T17:47:24Z",
    "17306008": "2026-10-29T17:47:24Z",
    "16669255": "2026-10-29T17:47:24Z",
-   "16679623": "2026-10-29T17:47:24Z",
    "13691116": "2026-10-29T17:47:24Z",
    "16678114": "2026-10-29T17:47:24Z",
    "17282944": "2026-10-29T17:47:24Z",
@@ -1489,7 +1469,6 @@
    "17292514": "2026-10-29T17:47:24Z",
    "16687600": "2026-10-29T17:47:24Z",
    "17169472": "2026-10-29T17:47:24Z",
-   "17225455": "2026-10-29T17:47:24Z",
    "16701346": "2026-10-29T17:47:24Z",
    "16700077": "2026-10-29T17:47:24Z",
    "14785443": "2026-10-29T17:47:24Z",
@@ -1511,7 +1490,6 @@
    "16688062": "2026-10-29T17:47:24Z",
    "17152666": "2026-10-29T17:47:24Z",
    "17237023": "2026-10-29T17:47:24Z",
-   "16698610": "2026-10-29T17:47:24Z",
    "16665487": "2026-10-29T17:47:24Z",
    "17272882": "2026-10-29T17:47:24Z",
    "16696258": "2026-10-29T17:47:24Z",
@@ -1526,7 +1504,6 @@
    "16700680": "2026-10-29T17:47:24Z",
    "16687651": "2026-10-29T17:47:24Z",
    "17342887": "2026-10-29T17:47:24Z",
-   "16665313": "2026-10-29T17:47:24Z",
    "16698421": "2026-10-29T17:47:24Z",
    "17266402": "2026-10-29T17:47:24Z",
    "17000431": "2026-10-29T17:47:24Z",
@@ -1537,7 +1514,6 @@
    "17169094": "2026-10-29T17:47:24Z",
    "16698502": "2026-10-29T17:47:24Z",
    "16686613": "2026-10-29T17:47:24Z",
-   "16702147": "2026-10-29T17:47:24Z",
    "16702432": "2026-10-29T17:47:24Z",
    "16992577": "2026-10-29T17:47:24Z",
    "16718647": "2026-10-29T17:47:24Z",
@@ -1549,11 +1525,11 @@
    "17348302": "2026-10-29T17:47:24Z",
    "17348590": "2026-10-29T17:47:24Z"
   },
-  "active_count": 14,
+  "active_count": 20,
   "list_budget": 25,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
   "complete_reads": 1,
   "complete_counted_at": "2026-10-29T20:38:47Z"
  },
@@ -1584,21 +1560,21 @@
     "Homepage shows Vienna rentals (e.g. 1110). /mietwohnungen returned a client error when fetched, so recheck the URL. Frequent on weekend.at."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-31T09:44:35Z",
   "offers_rentals": true,
   "last_fetches": 2,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 4,
-  "prev_ok_reads": 2,
-  "ok_reads": 3,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 2,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 3,
+  "ok_reads": 4,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 3,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "3si",
@@ -1626,21 +1602,21 @@
     "Developer/broker (mostly sales of Altbau/Neubau). Rental page showed 3 listings, 2 in Vienna (1100 Kudlichgasse, 1170 Antonigasse). Low volume."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-29T17:47:24Z",
   "offers_rentals": true,
   "last_fetches": 1,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 2,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 3,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 4,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "brichard-makler",
@@ -1670,21 +1646,21 @@
     "1190 Peter-Jordan-Straße 8. 69 objects, many Vienna rentals (1090/1120/1140/1200). Paginated /immobiliensuche/page/N/. Sister company Brichard Immobilien is a Hausverwaltung (IMMY award)."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-31T15:20:18Z",
   "offers_rentals": true,
-  "last_fetches": 12,
+  "last_fetches": 6,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 20,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 1,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 2,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "realimmo",
@@ -1694,7 +1670,7 @@
   "list_urls": [
    "https://www.realimmo.wien/wohnung-mieten"
   ],
-  "recipe": "Stand 31.10.2026: Liste https://www.realimmo.wien/wohnung-mieten zeigt 10 Mietobjekte (Rezept: 11), keine Paginierung und keine Gesamtzahl. 17322286 fehlt in der Liste; nicht als vergeben markiert, da kein Hinweis darauf. Neu: zwei Aparthotel-Einheiten (13320220, 14302606, 1220 Wien), Mietdauer nicht angegeben, daher data_quality partial. source_id = lange Zahl aus der URL (Objektnummern 51412 und 53512 der Detailseiten nicht verwendet). Vollständigkeit deshalb false.",
+  "recipe": "Routine 31.10.2026: Liste /wohnung-mieten zeigt 10 Mietobjekte, keine Paginierung. 17322286 fehlt in der Liste, nicht als vergeben markiert.",
   "enabled": true,
   "priority": 50,
   "discovery": {
@@ -1709,19 +1685,19 @@
     "Confirmed 11 Vienna rentals (1010, 1090, 1220, 1230). Possibly related to 'Real Immo Gerald Frank GmbH / Real Immo Austria' seen on weekend.at (not verified)."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
-  "recipe_updated": "2026-10-31T09:44:35Z",
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "last_fetches": 2,
+  "last_fetches": 1,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 11,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
   "complete_reads": 1,
   "complete_counted_at": "2026-10-29T20:38:47Z"
  },
@@ -1780,19 +1756,19 @@
     "Vienna developer with own Hausverwaltung, letting its own stock directly with no commission. 7 rental apartments (1030, 1050, 1100, 1140), plus garages and offices."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-29T17:47:24Z",
   "offers_rentals": true,
   "last_fetches": 1,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 7,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "neuraumwien",
@@ -1817,21 +1793,21 @@
     "1200 Wien. Commission-free 'Freie Objekte' page; 1 apartment (1160 Abelegasse) plus 1 office at fetch time. Low volume."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-29T17:47:24Z",
   "offers_rentals": true,
   "last_fetches": 1,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 1,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 3,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 4,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "oesw",
@@ -1842,7 +1818,7 @@
    "https://www.oesw.at/immobilienangebot/sofort-wohnen.html",
    "https://www.oesw.at/immobilienangebot/immobiliensuche.html"
   ],
-  "recipe": "Stand 31.10.2026: Listen unverändert (sofort-wohnen 21, immobiliensuche 35 Einträge, nur Projekte, ohne IDs, Preise und Paginierung). Geprüft ohne erfassbare Einheiten: Schweidlgasse 37, Vorgartenstraße 206, Rettichgasse 14-14a, Baldiagasse 12, Friedrich-Kaiser-Gasse 28, An den langen Lüssen 15, Perfektastraße 40, Ketzergasse 86-88, THE HOHM 9 (keine Einheitenliste, keine Mieten, nur Hinweise wie '1 Einheit' oder 'sofort verfügbar'). Das Lee (1220, in Bau): Einheitenliste mit Stiege/Top, m², Zimmer und Bruttomiete, aber ohne IDs und Status; abgeschnitten (46 sichtbar, Seite nennt 97). Nicht erfasst, Entscheidung offen. Taborstraße 119 nur Gewerbe; room4rent ist Kurzzeitwohnen und ausgeschlossen.",
+  "recipe": "Stand 31.10.2026: Listen unverändert, nur Projekte ohne IDs und Preise. Projektseiten geprüft: Erdbergstraße 218 (TERRAGON) nennt nur 1 Einheit ohne Top, Preis, m² oder Zimmer ('sofort verfügbar' keiner Einheit zuordenbar), nicht erfasst. Leopold-Böhm-Straße 5 (Q-Tower Miete): keine Mietwohnungen mehr verfügbar. B.R.I.O.: alle Wohnungen vergeben. Schweidlgasse 37, Vorgartenstraße 206 u. a. weiter ohne erfassbare Einheiten. Das Lee (1220) weiter Entscheidung offen. Keine Mietinserate erfasst, daher complete false.",
   "enabled": true,
   "priority": 92,
   "discovery": {
@@ -1861,16 +1837,16 @@
     "Large limited-profit and commercial developer/landlord. 'Sofort verfügbar' list has 22 Vienna entries mixing rent and sale. Privately financed rentals include Q-Tower (1030). Others: Terragon (1030), "
    ]
   },
-  "last_run": "2026-10-31T09:44:35Z",
-  "recipe_updated": "2026-10-31T09:44:35Z",
-  "last_fetches": 12,
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
+  "last_fetches": 5,
   "consecutive_failures": 0,
   "last_error": null,
   "active_count": 0,
-  "prev_ok_reads": 1,
-  "ok_reads": 2,
-  "reads_counted_at": "2026-10-31T09:44:35Z",
-  "last_ok": "2026-10-31T09:44:35Z",
+  "prev_ok_reads": 2,
+  "ok_reads": 3,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T20:38:47Z",
   "pending": {}
  },
@@ -1882,7 +1858,7 @@
   "list_urls": [
    "https://familienwohnbau.at/de/immobilien"
   ],
-  "recipe": "Lauf 2026103109: Eine Liste mit allen Objekten (rund 210, keine Paginierung), vollständig gelesen. Wiener Mietwohnungen erkennt man am Titelzusatz MIETE bzw. Kaufoption oder an Preisen unter etwa 3.000 €. Sammelinserate (N Einheiten) und Projektseiten ohne Preis (Nordwestbahnhof, Ernst-Wurnig-Weg, Willi-Hohm-Promenade) sind nicht gewertet. Townhouse 3dd5e17b im Detail als Wohnung mit Miete 2.635 € bestätigt. 3101eb25 ist ein zweiter Eintrag für dieselbe Einheit, als eigenes Listing erfasst. Die frühere ID 8ecfb2e1 ist nicht mehr in der Liste, ohne Vermietungsvermerk.",
+  "recipe": "Lauf 2026103116: Ein erster Abruf der Liste lieferte keine Inserate, sondern nur einen Hinweis; ein zweiter Abruf mit Zeilenliste lieferte 13 Einträge, davon 10 Wiener Mietwohnungen (bekannt) und 3 WG-Zimmer 1210 (ausgeschlossen). 3101eb25 (Zweiteintrag Townhouse 3dd5e17b) war in diesem Abruf nicht enthalten; daher complete=false, bis die Liste vollständig gelesen ist.",
   "enabled": true,
   "priority": 90,
   "discovery": {
@@ -1901,19 +1877,19 @@
     "Limited-profit association, but publishes concrete available units. About 13 Vienna rental apartments (1080, 1100, 1110, 1130, 1140) on the Kaufen & Mieten list. Miete filter is a button with no URL."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
-  "recipe_updated": "2026-10-31T09:44:35Z",
+  "last_run": "2026-10-31T16:42:12Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "last_fetches": 1,
+  "last_fetches": 2,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 11,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
   "complete_reads": 3,
   "complete_counted_at": "2026-10-31T15:20:18Z"
  },
@@ -1942,21 +1918,21 @@
     "1070 Andreasgasse 9. Limited-profit. Listing page had 1 Vienna rental apartment (1020 Taborstraße 111, €2,112 gross, probably privately financed), plus storage and commercial units. 8 pages."
    ]
   },
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "recipe_updated": "2026-10-29T17:47:24Z",
   "offers_rentals": true,
   "last_fetches": 2,
   "consecutive_failures": 0,
   "last_error": null,
-  "last_ok": "2026-10-31T15:20:18Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-29T17:47:24Z",
   "pending": {},
   "active_count": 1,
-  "prev_ok_reads": 3,
-  "ok_reads": 4,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "complete_reads": 3,
-  "complete_counted_at": "2026-10-31T15:20:18Z"
+  "prev_ok_reads": 4,
+  "ok_reads": 5,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 4,
+  "complete_counted_at": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "theblueground",
@@ -5490,37 +5466,31 @@
     "Office 1010. NOT CHECKED (WebSearch budget exhausted; site not fetchable in this session)."
    ]
   },
-  "active_count": 13,
-  "last_run": "2026-10-31T15:20:18Z",
-  "last_fetches": 11,
+  "active_count": 19,
+  "last_run": "2026-10-31T16:42:12Z",
+  "last_fetches": 12,
   "consecutive_failures": 0,
   "last_error": null,
   "recipe_updated": "2026-10-31T15:20:18Z",
   "offers_rentals": true,
-  "prev_ok_reads": 1,
-  "ok_reads": 2,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "last_ok": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 2,
+  "ok_reads": 3,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-31T09:44:35Z",
   "pending": {
    "4991009": "2026-10-31T09:44:35Z",
    "7038608": "2026-10-31T09:44:35Z",
    "17036326": "2026-10-31T09:44:35Z",
    "17036653": "2026-10-31T09:44:35Z",
-   "5034656": "2026-10-31T09:44:35Z",
    "5058254": "2026-10-31T09:44:35Z",
-   "13355350": "2026-10-31T09:44:35Z",
-   "17211982": "2026-10-31T09:44:35Z",
-   "16988560": "2026-10-31T09:44:35Z",
    "16837033": "2026-10-31T09:44:35Z",
    "17037634": "2026-10-31T09:44:35Z",
-   "17291611": "2026-10-31T09:44:35Z",
    "16914154": "2026-10-31T09:44:35Z",
    "16734052": "2026-10-31T09:44:35Z",
    "5043074": "2026-10-31T09:44:35Z",
    "5055695": "2026-10-31T09:44:35Z",
    "15347026": "2026-10-31T09:44:35Z",
-   "16674898": "2026-10-31T09:44:35Z",
    "16914862": "2026-10-31T09:44:35Z"
   }
  },
@@ -5833,16 +5803,16 @@
    ]
   },
   "active_count": 4,
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "last_fetches": 5,
   "consecutive_failures": 0,
   "last_error": null,
   "recipe_updated": "2026-10-31T09:44:35Z",
   "offers_rentals": true,
-  "prev_ok_reads": 1,
-  "ok_reads": 2,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "last_ok": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 2,
+  "ok_reads": 3,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-31T09:44:35Z",
   "pending": {}
  },
@@ -7725,7 +7695,7 @@
   "list_urls": [
    "https://www.hubner-immobilien.com"
   ],
-  "recipe": "Eigene Domain hat keine Objektliste (nur Zinshaus/Invest, Referenzen, Team). Immobiliensuche ist die EDI-Real-Suche https://immobiliensuche.edireal.com/hubner-immobilien.com/search/ (Fremddomain, nicht freigegeben; WebFetch abgelehnt). Startseite nennt 220 Angebote für 'Miete & Eigentum'. Noch kein Abruf der Liste gelungen.",
+  "recipe": "Eigene Wix-Domain ohne Objektliste; Menue 'Immobiliensuche' verlinkt nur EDI-Real (immobiliensuche.edireal.com/hubner-immobilien.com/search/), die per robots.txt fuer WebFetch gesperrt ist. Auch www.hubner-immobilien.com/immobiliensuche ist robots-gesperrt; /immobiliensuche/search und /de/kaufenverkaufen.html (alte EDI-Real-Seite, per domain-beschraenkter WebSearch gefunden) liefern client_error. Startseite nennt 220 Angebote (Miete & Eigentum). Derzeit kein lesbarer Listenweg; nur ueber andere Quelle (z. B. Portalprofil) erfassbar.",
   "enabled": true,
   "priority": 50,
   "discovery": {
@@ -7745,11 +7715,12 @@
    ]
   },
   "active_count": 0,
-  "last_run": "2026-10-31T15:20:18Z",
-  "last_fetches": 4,
-  "consecutive_failures": 3,
-  "last_error": "Mietliste nicht lesbar: Startseite verlinkt nur die EDI-Real-Suche (immobiliensuche.edireal.com/hubner-immobilien.com/search/, WebFetch URL_NOT_ON_ALLOWLIST, Fremddomain); www.hubner-immobilien.com/immobiliensuche/search und hubner-immobilien.com/wohnimmobilien-buero-und-geschaeftsflaechen.html lief",
-  "recipe_updated": "2026-10-31T15:20:18Z"
+  "last_run": "2026-10-31T16:42:12Z",
+  "last_fetches": 5,
+  "consecutive_failures": 4,
+  "last_error": "Objektliste dauerhaft nicht lesbar (robots-Sperre): EDI-Real-Suche immobiliensuche.edireal.com/hubner-immobilien.com/search/ -> robots_disallowed; www.hubner-immobilien.com/immobiliensuche -> robots_disallowed; /immobiliensuche/search und /de/kaufenverkaufen.html -> client_error. Eigene Seiten (Star",
+  "recipe_updated": "2026-10-31T16:42:12Z",
+  "last_repair": "2026-10-31T16:42:12Z"
  },
  {
   "slug": "hudej",
@@ -8058,12 +8029,16 @@
  {
   "slug": "lifestyle-properties",
   "name": "IM Lifestyle Properties GmbH",
-  "website": "https://lifestyle-properties.at",
-  "platform": null,
+  "website": "https://www.lifestyle-properties.at/",
+  "platform": "Drupal (eigenes CMS)",
   "list_urls": [
-   "https://lifestyle-properties.at"
+   "https://www.lifestyle-properties.at/immo-suche/angebotstyp/mieten",
+   "https://www.lifestyle-properties.at/immo-suche/angebotstyp/mieten?page=1",
+   "https://www.lifestyle-properties.at/immo-suche/angebotstyp/mieten?page=2",
+   "https://www.lifestyle-properties.at/immo-suche/angebotstyp/mieten?page=3",
+   "https://www.lifestyle-properties.at/immo-suche/angebotstyp/mieten?page=4"
   ],
-  "recipe": null,
+  "recipe": "Mietliste (alle Objektarten, auch Büros/Lokale/Häuser/Garagen): https://www.lifestyle-properties.at/immo-suche/angebotstyp/mieten, Paginierung ?page=0 bis ?page=4 (15 pro Seite, 5 Seiten, keine Gesamtzahl). Optionaler Typfilter /immo-suche/typ/wohnungen. Serverseitig gerendert (Drupal). Detail: /wohnung/<slug> (auch für Büros), Objektnummer als source_id. Listen zeigen nur Bezirk, keine PLZ: Wien über Bezirksangabe, Objektart über Detailseite prüfen. Preise ohne Aufschlüsselung (meist Gesamtmiete). Aus Detailbudget (8) nicht erfasste Wiener Wohnungen: 5390, 4850, 5350, 5352, 5224, 5262.",
   "enabled": true,
   "priority": 50,
   "discovery": {
@@ -8085,11 +8060,28 @@
     "Vienna rental listings seen on weekend.at portal (Oct 2026); own website NOT fetched/verified (search budget exhausted). 1010. Website from herold.at."
    ]
   },
-  "active_count": 0,
-  "last_run": "2026-10-29T20:38:47Z",
-  "last_fetches": 1,
-  "consecutive_failures": 1,
-  "last_error": "Einstiegs-URL https://lifestyle-properties.at von WebFetch abgelehnt (URL_NOT_ON_ALLOWLIST, nicht wiederholt). Einzige WebSearch 'lifestyle-properties.at Mietwohnung Wien' lieferte keine URL der Domain lifestyle-properties.at (nur Portal-/Pressetreffer), daher keine Seite des Maklers lesbar. Seite n"
+  "active_count": 8,
+  "last_run": "2026-10-31T16:42:12Z",
+  "last_fetches": 14,
+  "consecutive_failures": 0,
+  "last_error": null,
+  "recipe_updated": "2026-10-31T16:42:12Z",
+  "offers_rentals": true,
+  "prev_ok_reads": 0,
+  "ok_reads": 1,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "last_ok": "2026-10-31T16:42:12Z",
+  "baseline_at": "2026-10-31T16:42:12Z",
+  "complete_reads": 1,
+  "complete_counted_at": "2026-10-31T16:42:12Z",
+  "pending": {
+   "5262": "2026-10-31T16:42:12Z",
+   "4850": "2026-10-31T16:42:12Z",
+   "5350": "2026-10-31T16:42:12Z",
+   "5224": "2026-10-31T16:42:12Z",
+   "5390": "2026-10-31T16:42:12Z",
+   "5352": "2026-10-31T16:42:12Z"
+  }
  },
  {
   "slug": "im-mo",
@@ -8156,29 +8148,21 @@
     "Vienna rental listings seen on weekend.at portal (Oct 2026); own website NOT fetched/verified (search budget exhausted). Website from herold.at."
    ]
   },
-  "active_count": 12,
-  "last_run": "2026-10-31T15:20:18Z",
-  "last_fetches": 10,
+  "active_count": 20,
+  "last_run": "2026-10-31T16:42:12Z",
+  "last_fetches": 14,
   "consecutive_failures": 0,
   "last_error": null,
   "recipe_updated": "2026-10-31T15:20:18Z",
   "offers_rentals": true,
-  "prev_ok_reads": 1,
-  "ok_reads": 2,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "last_ok": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 2,
+  "ok_reads": 3,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-31T09:44:35Z",
   "pending": {
-   "16450732": "2026-10-31T09:44:35Z",
-   "17240581": "2026-10-31T09:44:35Z",
-   "16450660": "2026-10-31T09:44:35Z",
-   "16911793": "2026-10-31T09:44:35Z",
-   "16447396": "2026-10-31T09:44:35Z",
-   "16441876": "2026-10-31T09:44:35Z",
    "17003599": "2026-10-31T09:44:35Z",
-   "16911802": "2026-10-31T09:44:35Z",
-   "17171998": "2026-10-31T09:44:35Z",
-   "16911808": "2026-10-31T09:44:35Z"
+   "16911802": "2026-10-31T09:44:35Z"
   }
  },
  {
@@ -8679,7 +8663,7 @@
    "https://www.immocontract.at/immosuche/p/11?f%5Ball%5D%5Bmarketing_type%5D=rent&f%5Ball%5D%5Brealty_type%5D%5B0%5D=2",
    "https://www.immocontract.at/immosuche/p/24?f%5Ball%5D%5Bmarketing_type%5D=rent&f%5Ball%5D%5Brealty_type%5D%5B0%5D=2"
   ],
-  "recipe": "Einstieg https://www.immocontract.at/immosuche musste per domain-gefilterter WebSearch gefunden werden (Startseite URL_NOT_ON_ALLOWLIST). Plattform justimmo. Liste mit Filter Wohnung+Miete (Link 'Wohnung Miete' der Schnellsuche): list_urls_update, 24 Seiten à 20, Seiten /p/N. Liste enthält ganz Österreich: nach PLZ 1010-1230 selbst filtern. Reihenfolge instabil, Inserate wiederholen sich über Seiten. source_id = Zahl in /objektdetail/<ID> (nicht die Objektnummer 1939/xxxxx der Detailseite). Preis in Liste = Gesamtmiete brutto. Provision trägt Abgeber. Befristung meist 5 Jahre.",
+  "recipe": "Routine 31.10.2026: Paginierung zeigt Seiten 1 bis 5 und 24 (6 bis 23 nicht verlinkt). Vollstaendigkeit deshalb false. Nur Wien-PLZ (1010 bis 1230) gezaehlt.",
   "enabled": true,
   "priority": 50,
   "discovery": {
@@ -8703,17 +8687,17 @@
     "Vienna rental listings seen on weekend.at portal (Oct 2026); own website NOT fetched/verified (search budget exhausted). Volksbank-affiliated. By far the most frequent agency on weekend.at Vienna rent"
    ]
   },
-  "active_count": 8,
-  "last_run": "2026-10-31T15:20:18Z",
-  "last_fetches": 19,
+  "active_count": 13,
+  "last_run": "2026-10-31T16:42:12Z",
+  "last_fetches": 11,
   "consecutive_failures": 0,
   "last_error": null,
-  "recipe_updated": "2026-10-31T15:20:18Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "prev_ok_reads": 0,
-  "ok_reads": 1,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "last_ok": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 1,
+  "ok_reads": 2,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-31T15:20:18Z",
   "pending": {
    "16434451": "2026-10-31T15:20:18Z",
@@ -8726,7 +8710,6 @@
    "16367017": "2026-10-31T15:20:18Z",
    "16427878": "2026-10-31T15:20:18Z",
    "16434697": "2026-10-31T15:20:18Z",
-   "17297746": "2026-10-31T15:20:18Z",
    "16422751": "2026-10-31T15:20:18Z",
    "16427503": "2026-10-31T15:20:18Z",
    "16428682": "2026-10-31T15:20:18Z",
@@ -8748,7 +8731,6 @@
    "17297734": "2026-10-31T15:20:18Z",
    "17297761": "2026-10-31T15:20:18Z",
    "15331846": "2026-10-31T15:20:18Z",
-   "17297743": "2026-10-31T15:20:18Z",
    "16421461": "2026-10-31T15:20:18Z",
    "16431415": "2026-10-31T15:20:18Z",
    "16427563": "2026-10-31T15:20:18Z",
@@ -8767,7 +8749,6 @@
    "16424221": "2026-10-31T15:20:18Z",
    "16434463": "2026-10-31T15:20:18Z",
    "16424296": "2026-10-31T15:20:18Z",
-   "15116521": "2026-10-31T15:20:18Z",
    "17297764": "2026-10-31T15:20:18Z",
    "17325007": "2026-10-31T15:20:18Z",
    "15285361": "2026-10-31T15:20:18Z",
@@ -8786,7 +8767,6 @@
    "16434484": "2026-10-31T15:20:18Z",
    "17286628": "2026-10-31T15:20:18Z",
    "17259829": "2026-10-31T15:20:18Z",
-   "16430458": "2026-10-31T15:20:18Z",
    "17297749": "2026-10-31T15:20:18Z"
   }
  },
@@ -9175,11 +9155,16 @@
   "slug": "imv",
   "name": "IMV Makler GmbH",
   "website": "https://www.imv.co.at",
-  "platform": null,
+  "platform": "eigenes Portal (Immofinder, fify-dynamo-assets)",
   "list_urls": [
-   "https://www.imv.co.at"
+   "https://immofinder.imv.co.at/",
+   "https://immofinder.imv.co.at/?page=1",
+   "https://immofinder.imv.co.at/?page=2",
+   "https://immofinder.imv.co.at/?page=3",
+   "https://immofinder.imv.co.at/?page=4",
+   "https://immofinder.imv.co.at/?page=5"
   ],
-  "recipe": null,
+  "recipe": "Mietobjekte stehen nicht auf imv.co.at, sondern im Portal https://immofinder.imv.co.at/ (Kauf, Miete, Garagen gemischt, ca. 460 Treffer, 12 pro Seite, ~38 Seiten, Paginierung ?page=N; ?sort=createdAtDesc etc.). Kein Miete-Filter per URL auffindbar: Liste lesen und selbst filtern (Miete + Wohnung + PLZ 1010-1230; Parkplätze/Garagen ausschließen). Detail: /immobilie/<slug>-<hash>; source_id = Nummer 247/xxxxx aus der Detailseite (in der Liste nicht sichtbar). Preis = Gesamtmiete brutto; Heizung/Warmwasser extra. Einstiegs-URL imv.co.at hat keine Mietliste.",
   "enabled": true,
   "priority": 50,
   "discovery": {
@@ -9197,11 +9182,19 @@
     "Office 1040. NOT CHECKED (WebSearch budget exhausted; site not fetchable in this session)."
    ]
   },
-  "active_count": 0,
-  "last_run": "2026-10-29T20:38:47Z",
-  "last_fetches": 1,
-  "consecutive_failures": 1,
-  "last_error": "Einstiegs-URL https://www.imv.co.at von WebFetch abgelehnt (URL_NOT_ON_ALLOWLIST, nicht wiederholt). Einzige WebSearch 'imv.co.at Mietwohnung Wien' lieferte keine URL der Domain imv.co.at (nur Portal-/Pressetreffer), daher keine Seite des Maklers lesbar. Seite nicht inhaltlich geprüft, offers_rental"
+  "active_count": 8,
+  "last_run": "2026-10-31T16:42:12Z",
+  "last_fetches": 13,
+  "consecutive_failures": 0,
+  "last_error": null,
+  "recipe_updated": "2026-10-31T16:42:12Z",
+  "offers_rentals": true,
+  "prev_ok_reads": 0,
+  "ok_reads": 1,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "last_ok": "2026-10-31T16:42:12Z",
+  "baseline_at": "2026-10-31T16:42:12Z",
+  "pending": {}
  },
  {
   "slug": "inforeal",
@@ -16215,7 +16208,7 @@
   "list_urls": [
    "https://estina.at/immobilien/"
   ],
-  "recipe": "Stand 31.10.2026: Gesamtliste über offset 0, 20000 und 60000 gelesen; die Abdeckung der Gesamtliste ist nicht vollständig gesichert (complete false). Mietobjekte in PLZ 1010 bis 1230 nach Ausschluss von Lager, Stellplatz und Praxis: 67 Wohnungen. Detail über ?c=<ID>, c-Wert = source_id.",
+  "recipe": "Routine 31.10.2026: Startseite /immobilien/ lieferte nur eine Teilliste (Ausgabe bricht nach Eintrag 25 ab, keine Paginierungslinks). Vollständigkeit deshalb false. Bekannte IDs 14510955, 16308880, 17180719, 17202019 in dieser Ausgabe nicht gesehen. Detail über ?c=<ID>.",
   "enabled": true,
   "priority": 50,
   "discovery": {
@@ -16232,22 +16225,21 @@
     "seen per portal: immowelt 17, immobilienscout24 11; many units Donau-City-Strasse (1220); website as shown on portal exposé/profile; listings_url not verified (broker sites not fetchable in this sessi"
    ]
   },
-  "active_count": 12,
-  "last_run": "2026-10-31T15:20:18Z",
-  "last_fetches": 7,
+  "active_count": 13,
+  "last_run": "2026-10-31T16:42:12Z",
+  "last_fetches": 2,
   "consecutive_failures": 0,
   "last_error": null,
-  "recipe_updated": "2026-10-31T15:20:18Z",
+  "recipe_updated": "2026-10-31T16:42:12Z",
   "offers_rentals": true,
-  "prev_ok_reads": 1,
-  "ok_reads": 2,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "last_ok": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 2,
+  "ok_reads": 3,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-31T09:44:35Z",
   "pending": {
    "17182030": "2026-10-31T09:44:35Z",
    "17165968": "2026-10-31T09:44:35Z",
-   "14351836": "2026-10-31T09:44:35Z",
    "17223295": "2026-10-31T09:44:35Z",
    "17188642": "2026-10-31T09:44:35Z",
    "17122753": "2026-10-31T09:44:35Z",
@@ -16387,13 +16379,20 @@
  {
   "slug": "immoexpress",
   "name": "Immoexpress KG",
-  "website": "https://www.immoexpress.at",
-  "platform": null,
+  "website": "https://immo.express/",
+  "platform": "WordPress (eigene Immobilien-Plugin-Struktur, cdn.immo.express)",
   "list_urls": [
-   "https://www.immoexpress.at"
+   "https://immo.express/stadt/wien/",
+   "https://immo.express/stadt/wien/page/2/",
+   "https://immo.express/stadt/wien/page/3/",
+   "https://immo.express/stadt/wien/page/4/",
+   "https://immo.express/stadt/wien/page/5/",
+   "https://immo.express/stadt/wien/page/6/",
+   "https://immo.express/stadt/wien/page/7/",
+   "https://immo.express/stadt/wien/page/8/"
   ],
-  "recipe": null,
-  "enabled": true,
+  "recipe": "Domain immoexpress.at leitet (302) auf https://immo.express/ weiter (Wiener Kopfseite, Betreiber Immoexpress KG). Wien-Übersicht (Kauf+Miete gemischt, ca. 90 Objekte, 12 pro Seite): https://immo.express/stadt/wien/ und /stadt/wien/page/2/ bis /page/8/; Miete-Filter nur bundesweit (/status/zu-vermieten/), daher Wien-Liste lesen und selbst filtern (Miete + Objektart Wohnung + PLZ 1xx0). Serverseitig gerendert (WordPress). Detail: /objekt/<slug>/, ID = Objektnummer O21xxxxxxx nur auf der Detailseite. Preise meist Gesamtmiete inkl. BK/USt, Heizung oft extra. Einstiegs-URL musste per Redirect gefunden werden. Auch Kurzzeitmiete/Arbeiterquartier-Inserate kommen vor.",
+  "enabled": false,
   "priority": 50,
   "discovery": {
    "seen_on": [
@@ -16410,10 +16409,12 @@
    ]
   },
   "active_count": 0,
-  "last_run": "2026-10-31T15:20:18Z",
+  "last_run": "2026-10-31T16:42:12Z",
   "last_fetches": 1,
   "consecutive_failures": 2,
-  "last_error": "Einstiegs-URL https://www.immoexpress.at von WebFetch abgelehnt (URL_NOT_ON_ALLOWLIST); beide domain-gefilterten WebSearch-Anfragen (allowed_domains immoexpress.at/www.immoexpress.at: 'Mietwohnung Wien', 'Immoexpress KG') ohne Treffer. Seite nicht lesbar, Nutzer müsste eine URL der Domain freigeben."
+  "last_error": "Einstiegs-URL https://www.immoexpress.at von WebFetch abgelehnt (URL_NOT_ON_ALLOWLIST); beide domain-gefilterten WebSearch-Anfragen (allowed_domains immoexpress.at/www.immoexpress.at: 'Mietwohnung Wien', 'Immoexpress KG') ohne Treffer. Seite nicht lesbar, Nutzer müsste eine URL der Domain freigeben.",
+  "recipe_updated": "2026-10-31T16:42:12Z",
+  "disabled_reason": "Dublette von immo (gleiche Website)"
  },
  {
   "slug": "immo-company",
@@ -16443,26 +16444,21 @@
     "seen per portal: immowelt 7, immobilienscout24 3, derstandard 1; website as shown on portal exposé/profile; listings_url not verified (broker sites not fetchable in this session)"
    ]
   },
-  "active_count": 11,
-  "last_run": "2026-10-31T15:20:18Z",
-  "last_fetches": 6,
+  "active_count": 15,
+  "last_run": "2026-10-31T16:42:12Z",
+  "last_fetches": 7,
   "consecutive_failures": 0,
   "last_error": null,
   "recipe_updated": "2026-10-31T09:44:35Z",
   "offers_rentals": true,
-  "prev_ok_reads": 1,
-  "ok_reads": 2,
-  "reads_counted_at": "2026-10-31T15:20:18Z",
-  "last_ok": "2026-10-31T15:20:18Z",
+  "prev_ok_reads": 2,
+  "ok_reads": 3,
+  "reads_counted_at": "2026-10-31T16:42:12Z",
+  "last_ok": "2026-10-31T16:42:12Z",
   "baseline_at": "2026-10-31T09:44:35Z",
-  "complete_reads": 2,
-  "complete_counted_at": "2026-10-31T15:20:18Z",
-  "pending": {
-   "17335021": "2026-10-31T09:44:35Z",
-   "17334151": "2026-10-31T09:44:35Z",
-   "17331880": "2026-10-31T09:44:35Z",
-   "17334952": "2026-10-31T09:44:35Z"
-  }
+  "complete_reads": 3,
+  "complete_counted_at": "2026-10-31T16:42:12Z",
+  "pending": {}
  },
  {
   "slug": "karos",
