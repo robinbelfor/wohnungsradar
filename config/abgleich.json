@@ -3,5 +3,7 @@
   "06:00",
   "12:00"
  ],
- "tz": "Europe/Vienna"
+ "tz": "Europe/Vienna",
+ "trigger_id": "trig_01LFZzXz5rnLHjJzQAT1iDcq",
+ "mode": "cloud"
 }
