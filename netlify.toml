@@ -1,0 +1,11 @@
+# Statische Seite ohne Build. Die Wohnungsdaten liegen im Zweig "data" und werden vom Browser geladen,
+# daher löst ein Daten-Update keinen Netlify-Deploy aus.
+[build]
+  publish = "."
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Referrer-Policy = "no-referrer"

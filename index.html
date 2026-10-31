@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wohnungsradar Wien</title>
+<meta name="wr-data-url" content="https://raw.githubusercontent.com/robinbelfor/wohnungsradar/data/listings.json">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#d7263d">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M16 46 L50 16 L84 46' fill='none' stroke='%23d7263d' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='50' cy='66' r='20' fill='none' stroke='%23d7263d' stroke-width='9'/%3E%3Ccircle cx='50' cy='66' r='8' fill='%23d7263d'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&display=swap">
+<style>
+/* Layout: sticky criteria rail on the left, uniform listing cards in a fluid grid, detail sheet over everything. */
+:root {
+  --paper: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #eaeef4;
+  --ink: #15202e;
+  --muted: #5a6575;
+  --line: #d9dfe8;
+  --sign: #1d3c78;          /* Wiener Straßenschild-Blau */
+  --sign-ink: #ffffff;
+  --sign-soft: #e3e9f5;
+  --new: #c4122f;           /* "Neu" */
+  --good: #2c7a4b;
+  --warn: #a8640a;
+  --bad: #b3261e;
+  --shadow: 0 1px 2px rgba(21,32,46,.06), 0 4px 16px rgba(21,32,46,.06);
+  --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-data: "Barlow Semi Condensed", "DIN Alternate", "Arial Narrow", system-ui, sans-serif;
+  --r: 10px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e131a; --surface: #151c26; --surface-2: #1c2532; --ink: #e6ebf2; --muted: #9ba7b8;
+    --line: #2a3546; --sign: #3a63b5; --sign-ink: #ffffff; --sign-soft: #1d2a44; --new: #ff5b70;
+    --good: #5cc28a; --warn: #e3a447; --bad: #ff7a70;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e131a; --surface: #151c26; --surface-2: #1c2532; --ink: #e6ebf2; --muted: #9ba7b8;
+  --line: #2a3546; --sign: #3a63b5; --sign-ink: #ffffff; --sign-soft: #1d2a44; --new: #ff5b70;
+  --good: #5cc28a; --warn: #e3a447; --bad: #ff7a70;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--font-body); -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+[hidden] { display: none !important; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--sign); }
+:focus-visible { outline: 2px solid var(--sign); outline-offset: 2px; }
+.num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+
+/* ---------- top bar */
+.top { position: sticky; top: 0; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top-in { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left)); max-width: 1600px; margin: 0 auto; }
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.brand h1 { font: 700 22px/1.1 var(--font-display); margin: 0; letter-spacing: -.01em; white-space: nowrap; }
+.brand h1 { display: flex; align-items: center; gap: 9px; font-weight: 700; letter-spacing: -.03em; }
+.brand h1 svg { flex: none; }
+.brand h1 .city { font: 600 14px/1 var(--font-data); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.stand { color: var(--muted); font-size: 13px; }
+.stand.stale { color: var(--warn); font-weight: 700; }
+.tabs { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+.tab { border: 0; background: transparent; padding: 7px 12px; border-radius: 999px; cursor: pointer; color: var(--muted); font-weight: 700; font-size: 14px; display: inline-flex; gap: 6px; align-items: center; }
+.tab:hover { background: var(--surface-2); color: var(--ink); }
+.tab[aria-selected="true"] { background: var(--sign); color: var(--sign-ink); }
+.tab .cnt { font-family: var(--font-data); font-weight: 600; font-size: 13px; opacity: .85; }
+
+/* ---------- layout */
+.wrap { max-width: 1600px; margin: 0 auto; display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 24px; padding: 20px max(16px, env(safe-area-inset-right)) 48px max(16px, env(safe-area-inset-left)); }
+.rail { position: sticky; top: 72px; align-self: start; max-height: calc(100vh - 88px); overflow: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 18px; }
+.main { min-width: 0; display: grid; gap: 16px; align-content: start; }
+
+/* ---------- rail */
+.rail h2 { font: 700 13px/1 var(--font-data); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 8px; }
+.grp { display: grid; gap: 8px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field label, .lbl { font-size: 12px; color: var(--muted); }
+input[type=number], input[type=text], input[type=date], select, textarea {
+  width: 100%; min-width: 0; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--paper);
+}
+textarea { resize: vertical; min-height: 70px; }
+input[type=number] { font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: 16px; }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button, .chip-btn { border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 4px 10px; cursor: pointer; font-size: 13px; }
+.seg button[aria-pressed="true"], .chip-btn[aria-pressed="true"] { background: var(--sign); border-color: var(--sign); color: var(--sign-ink); }
+.dist { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.dist button { border: 1px solid var(--line); background: var(--paper); border-radius: 5px; padding: 5px 0; cursor: pointer; font: 600 14px/1 var(--font-data); font-variant-numeric: tabular-nums; }
+.dist button[aria-pressed="true"] { background: var(--sign); color: var(--sign-ink); border-color: var(--sign); }
+.dist-sum { font-size: 12px; color: var(--muted); }
+.linkish { background: none; border: 0; padding: 0; color: var(--sign); cursor: pointer; font-size: 12px; text-decoration: underline; text-underline-offset: 2px; }
+.toggle { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.toggle input { width: 16px; height: 16px; accent-color: var(--sign); }
+.search-head { display: grid; gap: 8px; }
+.search-pick { display: flex; gap: 6px; }
+.search-pick select { flex: 1; }
+.icon-btn { border: 1px solid var(--line); background: var(--paper); border-radius: 7px; padding: 6px 9px; cursor: pointer; line-height: 1; }
+.icon-btn:hover { border-color: var(--sign); }
+.bell { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px; border-radius: 8px; background: var(--sign-soft); }
+.bell .toggle { font-weight: 700; }
+.sync { font-size: 12px; color: var(--muted); display: grid; gap: 6px; }
+.sync .state { display: flex; gap: 6px; align-items: center; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.ok { background: var(--good); } .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); }
+.btn { border: 0; background: var(--sign); color: var(--sign-ink); border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: 700; font-size: 14px; }
+.btn.ghost { background: transparent; color: var(--sign); border: 1px solid var(--sign); }
+.btn.small { padding: 5px 9px; font-size: 13px; }
+.danger { color: var(--bad); }
+
+/* ---------- toolbar */
+.toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.toolbar .count { font: 700 20px/1.1 var(--font-display); }
+.toolbar .count small { font: 400 14px var(--font-body); color: var(--muted); }
+.toolbar .sp { flex: 1; }
+.toolbar input[type=text] { width: 220px; max-width: 100%; }
+.toolbar select { width: auto; }
+.filter-open { display: none; }
+
+/* ---------- cards */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; display: grid; grid-template-rows: auto 1fr; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.card:hover { border-color: color-mix(in srgb, var(--sign) 45%, var(--line)); box-shadow: var(--shadow); }
+.card.is-gone { opacity: .62; }
+.ph { position: relative; aspect-ratio: 4 / 3; background: var(--surface-2); overflow: hidden; max-width: 100%; }
+.ph img { width: 100%; height: 100%; object-fit: cover; }
+.ph .noimg { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; }
+.ph .nav { position: absolute; top: 50%; transform: translateY(-50%); border: 0; width: 32px; height: 32px; border-radius: 50%; background: rgba(15,20,27,.55); color: #fff; cursor: pointer; font-size: 18px; line-height: 1; opacity: 0; transition: opacity .15s; }
+.ph .nav.prev { left: 8px; } .ph .nav.next { right: 8px; }
+.card:hover .nav, .card:focus-within .nav { opacity: 1; }
+.ph .ctr { position: absolute; right: 8px; bottom: 8px; background: rgba(15,20,27,.62); color: #fff; font: 600 12px/1 var(--font-data); padding: 4px 7px; border-radius: 4px; }
+.ph .badges { position: absolute; left: 8px; top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+.badge { font: 700 11px/1 var(--font-data); letter-spacing: .08em; text-transform: uppercase; padding: 5px 7px; border-radius: 4px; background: var(--surface); color: var(--ink); }
+.badge.new { background: var(--new); color: #fff; }
+.badge.res { background: var(--warn); color: #fff; }
+.badge.gone { background: var(--ink); color: var(--surface); }
+.fav { position: absolute; right: 8px; top: 8px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(255,255,255,.92); cursor: pointer; display: grid; place-items: center; color: #15202e; }
+.fav svg { width: 18px; height: 18px; }
+.fav[aria-pressed="true"] { color: var(--new); }
+.body { padding: 12px 14px 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.price { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.price b { font: 700 24px/1 var(--font-display); letter-spacing: -.01em; }
+.price .per { color: var(--muted); font-size: 13px; }
+.price .ppm { margin-left: auto; font: 600 14px/1 var(--font-data); color: var(--muted); font-variant-numeric: tabular-nums; }
+.facts { font: 600 16px/1.2 var(--font-data); font-variant-numeric: tabular-nums; display: flex; gap: 6px 12px; flex-wrap: wrap; }
+.facts span + span::before { content: "·"; margin-right: 12px; color: var(--muted); }
+.sign { display: inline-flex; align-items: center; align-self: start; justify-self: start; max-width: 100%; background: var(--sign); color: var(--sign-ink); font: 600 14px/1 var(--font-data); padding: 7px 10px; border-radius: 3px; outline: 1.5px solid var(--sign-ink); outline-offset: -4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .01em; }
+.sign.big { font-size: 18px; padding: 10px 14px; outline-offset: -5px; }
+.pills { display: flex; gap: 5px; flex-wrap: wrap; }
+.pill { font-size: 12px; padding: 3px 8px; border-radius: 999px; background: var(--surface-2); color: var(--ink); white-space: nowrap; }
+.pill.ok { background: color-mix(in srgb, var(--good) 15%, var(--surface)); color: var(--good); font-weight: 700; }
+.pill.warn { background: color-mix(in srgb, var(--warn) 15%, var(--surface)); color: var(--warn); font-weight: 700; }
+.title { font-size: 14px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.foot { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; margin-top: 2px; }
+.foot span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- empty / notes */
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: var(--r); padding: 36px 24px; text-align: center; color: var(--muted); display: grid; gap: 8px; justify-items: center; }
+.empty h3 { font: 700 20px/1.2 var(--font-display); color: var(--ink); margin: 0; }
+.notice { background: color-mix(in srgb, var(--warn) 12%, var(--surface)); border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--line)); border-radius: 8px; padding: 10px 12px; font-size: 14px; }
+
+/* ---------- detail dialog */
+dialog.detail { border: 0; padding: 0; width: min(1180px, 100vw - 32px); max-height: calc(100vh - 32px); border-radius: 14px; background: var(--surface); color: var(--ink); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+dialog.detail::backdrop { background: rgba(10,14,20,.55); }
+.d-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+.d-gal { background: #0b0f15; display: grid; grid-template-rows: minmax(0,1fr) auto; min-height: 0; }
+.d-stage { position: relative; aspect-ratio: 4 / 3; max-width: 100%; }
+.d-stage img { width: 100%; height: 100%; object-fit: contain; }
+.d-stage .nav { position: absolute; top: 50%; transform: translateY(-50%); border: 0; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.18); color: #fff; font-size: 22px; cursor: pointer; }
+.d-stage .nav:hover { background: rgba(255,255,255,.3); }
+.d-stage .prev { left: 12px; } .d-stage .next { right: 12px; }
+.d-stage .ctr { position: absolute; left: 12px; bottom: 12px; color: #fff; font: 600 13px var(--font-data); background: rgba(0,0,0,.5); padding: 4px 8px; border-radius: 4px; }
+.thumbs { display: flex; gap: 6px; overflow-x: auto; padding: 8px; }
+.thumbs button { flex: none; width: 76px; height: 57px; padding: 0; border: 2px solid transparent; border-radius: 4px; overflow: hidden; cursor: pointer; background: #222; }
+.thumbs button[aria-current="true"] { border-color: #fff; }
+.thumbs img { width: 100%; height: 100%; object-fit: cover; }
+.gal-tabs { display: flex; gap: 6px; padding: 8px 8px 0; }
+.gal-tabs button { background: rgba(255,255,255,.12); color: #fff; border: 0; border-radius: 999px; padding: 4px 10px; cursor: pointer; font-size: 13px; }
+.gal-tabs button[aria-pressed="true"] { background: #fff; color: #0b0f15; }
+.d-info { padding: 20px 22px 24px; overflow: auto; max-height: calc(100vh - 32px); display: grid; gap: 18px; align-content: start; min-width: 0; }
+.d-head { display: grid; gap: 10px; }
+.d-close { position: absolute; right: 12px; top: 12px; z-index: 3; width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--surface); color: var(--ink); cursor: pointer; font-size: 20px; box-shadow: var(--shadow); }
+.d-title { font: 700 22px/1.2 var(--font-display); margin: 0; text-wrap: balance; }
+.d-price { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.d-price b { font: 700 32px/1 var(--font-display); }
+.d-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.sec h3 { font: 700 12px/1 var(--font-data); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); margin: 0 0 8px; }
+.kv { display: grid; grid-template-columns: minmax(120px, auto) minmax(0, 1fr); gap: 5px 14px; margin: 0; font-size: 14px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+.kv dd.na { color: var(--muted); font-weight: 400; }
+.energy { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; margin-top: 4px; }
+.energy span { font: 700 11px/1 var(--font-data); color: #fff; text-align: center; padding: 6px 0; border-radius: 2px; opacity: .35; }
+.energy span.on { opacity: 1; transform: scaleY(1.25); box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--ink); }
+.desc { font-size: 15px; line-height: 1.6; max-width: 65ch; margin: 0; }
+.contact { display: grid; gap: 4px; font-size: 14px; }
+.copy { user-select: all; font-weight: 700; }
+.hist { font-size: 13px; color: var(--muted); display: grid; gap: 3px; }
+
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--ink); color: var(--surface); padding: 10px 16px; border-radius: 999px; font-weight: 700; box-shadow: var(--shadow); z-index: 50; max-width: calc(100vw - 32px); }
+
+/* ---------- brokers table */
+.tbl-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font: 700 12px/1 var(--font-data); text-transform: uppercase; letter-spacing: .07em; color: var(--muted); background: var(--surface-2); position: sticky; top: 0; }
+td.n { text-align: right; font-family: var(--font-data); font-variant-numeric: tabular-nums; font-weight: 600; }
+td.err { white-space: normal; color: var(--bad); font-size: 13px; max-width: 360px; }
+.kpis { display: flex; gap: 10px 28px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+.kpis b { font: 700 22px/1 var(--font-display); color: var(--ink); display: block; }
+.runbars { display: flex; align-items: flex-end; gap: 2px; height: 48px; }
+.runbars i { flex: 1; background: var(--sign); border-radius: 2px 2px 0 0; min-height: 2px; opacity: .85; }
+.runbars i.fail { background: var(--warn); }
+
+@media (max-width: 1000px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: fixed; inset: 0 auto 0 0; width: min(360px, 92vw); max-height: none; border-radius: 0; z-index: 40; transform: translateX(-102%); transition: transform .2s; padding-top: calc(16px + env(safe-area-inset-top)); padding-bottom: calc(16px + env(safe-area-inset-bottom)); padding-left: max(16px, env(safe-area-inset-left)); }
+  .rail.open { transform: none; box-shadow: 0 0 0 100vmax rgba(0,0,0,.4); }
+  .filter-open { display: inline-flex; }
+  .rail .close-rail { display: inline-flex !important; }
+  .d-grid { grid-template-columns: minmax(0, 1fr); }
+  dialog.detail { width: 100vw; max-width: 100vw; max-height: 100vh; height: 100%; border-radius: 0; }
+  .d-info { max-height: none; overflow: visible; }
+  dialog.detail[open] { overflow: auto; }
+  .tabs { margin-left: 0; width: 100%; }
+}
+@media (max-width: 480px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .toolbar input[type=text] { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1><svg width="28" height="28" viewBox="0 0 100 100" aria-hidden="true"><path d="M16 46 L50 16 L84 46" fill="none" stroke="#d7263d" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="66" r="20" fill="none" stroke="#d7263d" stroke-width="9"/><circle cx="50" cy="66" r="8" fill="#d7263d"/></svg>wohnungsradar <span class="city">Wien</span></h1>
+      <span class="stand" id="stand">Lade Daten …</span>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Ansicht">
+      <button class="tab" role="tab" data-view="matches" aria-selected="true">Treffer <span class="cnt" id="c-matches"></span></button>
+      <button class="tab" role="tab" data-view="all">Alle aktiven <span class="cnt" id="c-all"></span></button>
+      <button class="tab" role="tab" data-view="favs">Merkliste <span class="cnt" id="c-favs"></span></button>
+      <button class="tab" role="tab" data-view="hidden">Ausgeblendet <span class="cnt" id="c-hidden"></span></button>
+      <button class="tab" role="tab" data-view="brokers">Makler <span class="cnt" id="c-brokers"></span></button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside class="rail" id="rail" aria-label="Suchkriterien">
+    <div class="search-head">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2 style="margin:0">Suche</h2>
+        <button class="icon-btn close-rail" id="close-rail" style="display:none" aria-label="Filter schließen">✕</button>
+      </div>
+      <div class="search-pick">
+        <select id="search-select" aria-label="Gespeicherte Suche"></select>
+        <button class="icon-btn" id="search-new" title="Neue Suche (Kopie der aktuellen)" aria-label="Neue Suche">＋</button>
+        <button class="icon-btn" id="search-rename" title="Umbenennen" aria-label="Suche umbenennen">✎</button>
+        <button class="icon-btn" id="search-del" title="Löschen" aria-label="Suche löschen">🗑</button>
+      </div>
+      <div id="rename-row" class="search-pick" hidden>
+        <input type="text" id="rename-input" aria-label="Neuer Name">
+        <button class="btn small" id="rename-ok">OK</button>
+      </div>
+      <div id="del-row" class="notice" hidden>
+        Suche „<span id="del-name"></span>“ löschen?
+        <div style="display:flex;gap:8px;margin-top:8px"><button class="btn small" id="del-yes">Löschen</button><button class="btn small ghost" id="del-no">Abbrechen</button></div>
+      </div>
+      <div class="bell">
+        <label class="toggle"><input type="checkbox" id="f-notify"> Push bei neuen Treffern</label>
+      </div>
+    </div>
+
+    <div class="grp">
+      <h2>Gesamtmiete / Monat</h2>
+      <div class="row2">
+        <div class="field"><label for="f-rent_min">von €</label><input type="number" id="f-rent_min" min="0" step="50" inputmode="numeric"></div>
+        <div class="field"><label for="f-rent_max">bis €</label><input type="number" id="f-rent_max" min="0" step="50" inputmode="numeric"></div>
+      </div>
+      <div class="field"><label for="f-ppm2_max">max. € pro m²</label><input type="number" id="f-ppm2_max" min="0" step="0.5" inputmode="decimal"></div>
+    </div>
+
+    <div class="grp">
+      <h2>Fläche &amp; Zimmer</h2>
+      <div class="row2">
+        <div class="field"><label for="f-area_min">ab m²</label><input type="number" id="f-area_min" min="0" step="5" inputmode="numeric"></div>
+        <div class="field"><label for="f-area_max">bis m²</label><input type="number" id="f-area_max" min="0" step="5" inputmode="numeric"></div>
+      </div>
+      <div class="lbl">Zimmer mindestens</div>
+      <div class="seg" id="f-rooms_min" role="group" aria-label="Zimmer mindestens">
+        <button data-v="">egal</button><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5+</button>
+      </div>
+    </div>
+
+    <div class="grp">
+      <h2>Bezirke</h2>
+      <div class="dist" id="f-districts" role="group" aria-label="Bezirke"></div>
+      <div class="dist-sum"><span id="dist-sum">Ganz Wien</span> · <button class="linkish" id="dist-clear">alle</button></div>
+    </div>
+
+    <div class="grp">
+      <h2>Muss haben</h2>
+      <label class="toggle"><input type="checkbox" id="f-outdoor"> Freifläche (Balkon, Loggia, Terrasse, Garten)</label>
+      <label class="toggle"><input type="checkbox" id="f-elevator"> Lift</label>
+      <label class="toggle"><input type="checkbox" id="f-term"> Unbefristet</label>
+      <label class="toggle"><input type="checkbox" id="f-commission_free"> Provisionsfrei</label>
+    </div>
+
+    <div class="grp">
+      <h2>Möbliert</h2>
+      <div class="seg" id="f-furnished" role="group" aria-label="Möbliert">
+        <button data-v="any">egal</button><button data-v="yes">ja</button><button data-v="no">nein</button>
+      </div>
+      <h2 style="margin-top:6px">Gebäude</h2>
+      <div class="seg" id="f-building" role="group" aria-label="Gebäudeart">
+        <button data-v="altbau">Altbau</button><button data-v="sanierter_altbau">sanierter Altbau</button><button data-v="neubau">Neubau</button><button data-v="erstbezug">Erstbezug</button>
+      </div>
+    </div>
+
+    <div class="grp">
+      <h2>Einzug &amp; Stichwörter</h2>
+      <div class="field"><label for="f-available_by">bezugsfertig spätestens</label><input type="date" id="f-available_by"></div>
+      <div class="field"><label for="f-kw_inc">enthält eines von (Komma-getrennt)</label><input type="text" id="f-kw_inc" placeholder="z. B. Parkett, Dachgeschoss"></div>
+      <div class="field"><label for="f-kw_exc">enthält nichts davon</label><input type="text" id="f-kw_exc" placeholder="z. B. WG, Kurzzeit"></div>
+    </div>
+
+    <div class="sync" id="sync"></div>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="toolbar" id="toolbar">
+      <button class="btn ghost small filter-open" id="filter-open">Filter</button>
+      <div class="count" id="count"></div>
+      <div class="sp"></div>
+      <label class="toggle"><input type="checkbox" id="only-new"> nur neue (24 Std.)</label>
+      <input type="text" id="q" placeholder="Straße, Makler, Stichwort …" aria-label="Schnellsuche">
+      <select id="sort" aria-label="Sortierung">
+        <option value="new">Neueste zuerst</option>
+        <option value="price_asc">Miete aufsteigend</option>
+        <option value="price_desc">Miete absteigend</option>
+        <option value="ppm_asc">€/m² aufsteigend</option>
+        <option value="area_desc">Fläche absteigend</option>
+      </select>
+    </div>
+    <div id="stale-note" class="notice" hidden></div>
+    <div class="grid" id="grid"></div>
+    <div id="brokers" hidden></div>
+  </main>
+</div>
+
+<dialog class="detail" id="detail" aria-label="Inserat"></dialog>
+<div class="toast" id="toast" hidden></div>
+
+<script>if (!((document.querySelector('meta[name="wr-data-url"]') || {}).content || "").trim()) document.write('<script src="data/listings.js" onerror="window.WP_DATA_MISSING=true"><\/script>');</script>
+<script>
+"use strict";
+/* ================================================================ constants */
+const DISTRICTS = {1:"Innere Stadt",2:"Leopoldstadt",3:"Landstraße",4:"Wieden",5:"Margareten",6:"Mariahilf",7:"Neubau",8:"Josefstadt",9:"Alsergrund",10:"Favoriten",11:"Simmering",12:"Meidling",13:"Hietzing",14:"Penzing",15:"Rudolfsheim-Fünfhaus",16:"Ottakring",17:"Hernals",18:"Währing",19:"Döbling",20:"Brigittenau",21:"Floridsdorf",22:"Donaustadt",23:"Liesing"};
+const OUTDOOR = {balkon:"Balkon",loggia:"Loggia",terrasse:"Terrasse",dachterrasse:"Dachterrasse",garten:"Garten",wintergarten:"Wintergarten",eigengarten:"Eigengarten"};
+const BUILDING = {altbau:"Altbau",sanierter_altbau:"sanierter Altbau",neubau:"Neubau",erstbezug:"Erstbezug"};
+const HWB_CLASSES = [["A++",10,"#0b7a3e"],["A+",15,"#1f8c3b"],["A",25,"#4aa23a"],["B",50,"#9bc13c"],["C",100,"#e6d22a"],["D",150,"#f2ad1c"],["E",200,"#ea7a1c"],["F",250,"#df4a1c"],["G",Infinity,"#c8161d"]];
+const FGEE_CLASSES = [["A++",.55],["A+",.70],["A",.85],["B",1.00],["C",1.75],["D",2.50],["E",3.25],["F",4.00],["G",Infinity]];
+const DEFAULT_SEARCH = () => ({ id: "s" + Date.now().toString(36), name: "Hauptsuche", notify: true, rent_min: null, rent_max: 2500, ppm2_max: null, area_min: null, area_max: null, rooms_min: null, rooms_max: null, districts: [], outdoor: "any", elevator: "any", term: "any", commission_free: false, furnished: "any", building: [], available_by: null, keywords_include: [], keywords_exclude: [], updated: new Date(0).toISOString() });
+const NEW_MS = 24 * 3600 * 1000;
+const LS = "wohnungsradar.";
+
+/* ================================================================ storage helpers */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(LS + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(LS + k, JSON.stringify(v)); } catch (e) {} }
+};
+function idb() {
+  return new Promise((res, rej) => {
+    try { const r = indexedDB.open("wohnungsradar", 1); r.onupgradeneeded = () => r.result.createObjectStore("kv"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); } catch (e) { rej(e); }
+  });
+}
+async function idbGet(k) { try { const db = await idb(); return await new Promise(r => { const q = db.transaction("kv").objectStore("kv").get(k); q.onsuccess = () => r(q.result); q.onerror = () => r(undefined); }); } catch (e) { return undefined; } }
+async function idbSet(k, v) { try { const db = await idb(); await new Promise(r => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").put(v, k); t.oncomplete = r; t.onerror = r; }); } catch (e) {} }
+
+/* ================================================================ state */
+const S = {
+  data: { listings: [], brokers: [], criteria: { searches: [] }, runs: [], generated_at: null },
+  searches: [], activeId: null, view: "matches", sort: store.get("sort", "new"), onlyNew: false, q: "",
+  marks: store.get("marks", {}), lastVisit: store.get("lastVisit", null), dirHandle: null, syncState: "none", syncedAt: null,
+  knownIds: null,
+};
+
+/* ================================================================ format helpers */
+const fmtEur = new Intl.NumberFormat("de-AT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+const fmtEur2 = new Intl.NumberFormat("de-AT", { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtNum = (v, d = 1) => v == null ? null : new Intl.NumberFormat("de-AT", { maximumFractionDigits: d }).format(v);
+const rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto", style: "short" });
+function ago(iso) {
+  if (!iso) return "–";
+  const s = (new Date(iso) - Date.now()) / 1000, a = Math.abs(s);
+  if (a < 3600) return rtf.format(Math.round(s / 60), "minute");
+  if (a < 86400) return rtf.format(Math.round(s / 3600), "hour");
+  return rtf.format(Math.round(s / 86400), "day");
+}
+const fmtDate = iso => { if (!iso) return null; const d = new Date(iso); return isNaN(d) ? String(iso) : d.toLocaleDateString("de-AT", { day: "2-digit", month: "2-digit", year: "numeric" }); };
+const fmtTime = iso => new Date(iso).toLocaleString("de-AT", { weekday: "short", hour: "2-digit", minute: "2-digit" });
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const $ = s => document.querySelector(s);
+function signText(l) {
+  const d = l.district ? l.district + ".," : (l.zip || "Wien");
+  const street = l.street ? l.street + (l.house_number ? " " + l.house_number : "") : (l.district_name || "");
+  return (d + " " + street).trim();
+}
+function classOf(val, table) { if (val == null) return null; for (const c of table) if (val <= c[1]) return c[0]; return null; }
+function isNew(l) { return !l.baseline && l.first_seen && (Date.now() - new Date(l.first_seen)) < NEW_MS; }
+function sinceVisit(l) { return !l.baseline && S.lastVisit && l.first_seen && new Date(l.first_seen) > new Date(S.lastVisit); }
+
+/* ================================================================ matching (mirror of tools/merge.py) */
+function textOf(l) { return [l.title, l.summary, (l.features || []).join(" "), l.street, l.district_name].join(" ").toLowerCase(); }
+function inRange(v, lo, hi) { if (v == null) return true; if (lo != null && lo !== "" && v < +lo) return false; if (hi != null && hi !== "" && v > +hi) return false; return true; }
+function matches(l, s) {
+  if (l.status !== "active" && l.status !== "reserved") return false;
+  if (!inRange(l.rent_total, s.rent_min, s.rent_max)) return false;
+  if (!inRange(l.area, s.area_min, s.area_max)) return false;
+  if (!inRange(l.rooms, s.rooms_min, s.rooms_max)) return false;
+  if (!inRange(l.price_per_m2, null, s.ppm2_max)) return false;
+  if (s.districts && s.districts.length && l.district != null && !s.districts.includes(l.district)) return false;
+  if (s.outdoor === "required" && !(l.outdoor && l.outdoor.length)) return false;
+  if (s.elevator === "required" && l.elevator !== true) return false;
+  if (s.term === "unbefristet" && l.term !== "unbefristet") return false;
+  if (s.commission_free && l.commission_free !== true) return false;
+  if (s.furnished === "yes" && !["yes", "partly"].includes(l.furnished)) return false;
+  if (s.furnished === "no" && ["yes", "partly"].includes(l.furnished)) return false;
+  if (s.building && s.building.length && !s.building.includes(l.building)) return false;
+  if (s.available_by && l.available_from && String(l.available_from).slice(0, 10) > String(s.available_by).slice(0, 10)) return false;
+  const t = textOf(l);
+  const inc = (s.keywords_include || []).map(k => k.trim().toLowerCase()).filter(Boolean);
+  const exc = (s.keywords_exclude || []).map(k => k.trim().toLowerCase()).filter(Boolean);
+  if (inc.length && !inc.some(k => t.includes(k))) return false;
+  if (exc.some(k => t.includes(k))) return false;
+  return true;
+}
+
+/* ================================================================ data load + criteria */
+function ingest(first) {
+  const D = window.WP_DATA || { listings: [], brokers: [], criteria: { searches: [] }, runs: [], generated_at: null };
+  const prevIds = S.knownIds;
+  S.data = D;
+  S.knownIds = new Set(D.listings.map(l => l.id));
+  // criteria: file (embedded at last run) vs local copy -> newer wins
+  const fileS = (D.criteria && D.criteria.searches) || [];
+  const localS = store.get("searches", null);
+  const newest = arr => (arr || []).reduce((m, s) => (s.updated || "") > m ? s.updated : m, "");
+  if (first) {
+    if (localS && localS.length && newest(localS) >= newest(fileS)) S.searches = localS;
+    else if (fileS.length) S.searches = fileS;
+    else S.searches = [DEFAULT_SEARCH()];
+    S.activeId = store.get("activeSearch", null);
+    if (!S.searches.find(s => s.id === S.activeId)) S.activeId = S.searches[0].id;
+  }
+  if (!first && prevIds) {
+    const fresh = D.listings.filter(l => !prevIds.has(l.id) && l.status === "active");
+    if (fresh.length) {
+      const hit = fresh.filter(l => S.searches.some(s => matches(l, s))).length;
+      toast(`${fresh.length} neue Wohnung${fresh.length > 1 ? "en" : ""} eingelesen${hit ? ` · ${hit} passend` : ""}`);
+    }
+  }
+}
+/* Web version (Netlify): data comes as JSON from the URL in <meta name="wr-data-url">; the Mac version keeps using data/listings.js */
+const REMOTE = ((document.querySelector('meta[name="wr-data-url"]') || {}).content || "").trim();
+async function fetchRemote() {
+  const r = await fetch(REMOTE + (REMOTE.includes("?") ? "&" : "?") + "t=" + Date.now(), { cache: "no-store" });
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  window.WP_DATA = await r.json(); window.WP_DATA_MISSING = false;
+}
+function reloadData() {
+  if (REMOTE) { fetchRemote().then(() => { ingest(false); renderAll(); }).catch(() => {}); return; }
+  const s = document.createElement("script");
+  s.src = "data/listings.js?t=" + Date.now();
+  s.onload = () => { ingest(false); renderAll(); s.remove(); };
+  s.onerror = () => s.remove();
+  document.body.appendChild(s);
+}
+const active = () => S.searches.find(s => s.id === S.activeId) || S.searches[0];
+let saveTimer = null;
+function touchSearch() {
+  active().updated = new Date().toISOString();
+  store.set("searches", S.searches);
+  store.set("activeSearch", S.activeId);
+  S.syncState = S.dirHandle ? "pending" : "local";
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { if (S.dirHandle) writeCriteria(false); else renderSync(); }, 1200);
+  renderSync();
+  renderResults();
+  renderCounts();
+}
+
+/* ================================================================ folder sync (File System Access) */
+const fsSupported = "showDirectoryPicker" in window;
+async function connectFolder() {
+  try {
+    const h = await window.showDirectoryPicker({ id: "wohnungsradar", mode: "readwrite" });
+    let ok = false;
+    try { const d = await h.getDirectoryHandle("data"); await d.getFileHandle("listings.js"); ok = true; } catch (e) {}
+    if (!ok) { toast("Bitte den Ordner „Wohnungsportal“ wählen (der mit index.html)."); return; }
+    S.dirHandle = h; await idbSet("dir", h); await writeCriteria(true);
+  } catch (e) { if (e && e.name !== "AbortError") toast("Ordner konnte nicht verbunden werden: " + e.message); }
+}
+async function restoreFolder() {
+  if (!fsSupported) return;
+  const h = await idbGet("dir");
+  if (!h) return;
+  S.dirHandle = h;
+  try { const p = await h.queryPermission({ mode: "readwrite" }); S.syncState = p === "granted" ? "ok" : "needs-permission"; } catch (e) { S.syncState = "needs-permission"; }
+  renderSync();
+}
+async function writeCriteria(interactive) {
+  if (!S.dirHandle) return;
+  try {
+    let p = await S.dirHandle.queryPermission({ mode: "readwrite" });
+    if (p !== "granted" && interactive) p = await S.dirHandle.requestPermission({ mode: "readwrite" });
+    if (p !== "granted") { S.syncState = "needs-permission"; renderSync(); return; }
+    const cfg = await S.dirHandle.getDirectoryHandle("config", { create: true });
+    const fh = await cfg.getFileHandle("suchkriterien.json", { create: true });
+    const w = await fh.createWritable();
+    await w.write(JSON.stringify({ updated: new Date().toISOString(), searches: S.searches }, null, 1));
+    await w.close();
+    S.syncState = "ok"; S.syncedAt = new Date().toISOString();
+  } catch (e) { S.syncState = "error"; S.syncError = e.message; }
+  renderSync();
+}
+function downloadCriteria() {
+  const blob = new Blob([JSON.stringify({ updated: new Date().toISOString(), searches: S.searches }, null, 1)], { type: "application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "suchkriterien.json"; document.body.appendChild(a); a.click(); a.remove();
+  toast("Gespeichert in Downloads – bitte nach Wohnungsportal/config verschieben.");
+}
+function renderSync() {
+  const el = $("#sync");
+  const fileS = (S.data.criteria && S.data.criteria.searches) || [];
+  const fileNewest = fileS.reduce((m, s) => (s.updated || "") > m ? s.updated : m, "");
+  const localNewest = S.searches.reduce((m, s) => (s.updated || "") > m ? s.updated : m, "");
+  const inSync = S.syncState === "ok" || (!S.dirHandle && localNewest <= fileNewest);
+  let html = "";
+  if (S.dirHandle && S.syncState === "ok") html = `<div class="state"><span class="dot ok"></span>Benachrichtigungen nutzen diese Kriterien${S.syncedAt ? " · gesichert " + ago(S.syncedAt) : ""}</div>`;
+  else if (S.dirHandle && S.syncState === "pending") html = `<div class="state"><span class="dot warn"></span>Speichere …</div>`;
+  else if (S.dirHandle && S.syncState === "needs-permission") html = `<div class="state"><span class="dot warn"></span>Ordner-Zugriff abgelaufen</div><button class="btn small" id="sync-perm">Zugriff erneut erlauben</button>`;
+  else if (S.dirHandle && S.syncState === "error") html = `<div class="state"><span class="dot bad"></span>Speichern fehlgeschlagen: ${esc(S.syncError)}</div><button class="btn small" id="sync-retry">Erneut versuchen</button>`;
+  else if (inSync) html = `<div class="state"><span class="dot ok"></span>Benachrichtigungen nutzen diese Kriterien</div>${fsSupported ? `<button class="linkish" id="sync-connect">Ordner verbinden, damit Änderungen automatisch übernommen werden</button>` : ""}`;
+  else if (fsSupported) html = `<div class="state"><span class="dot warn"></span>Änderungen gelten erst hier im Browser. Für Push-Nachrichten einmal den Ordner verbinden:</div><button class="btn small" id="sync-connect">Ordner „Wohnungsportal“ verbinden</button>`;
+  else html = `<div class="state"><span class="dot warn"></span>Änderungen gelten erst hier im Browser. Dieser Browser kann nicht direkt in den Ordner schreiben (Chrome, Edge, Arc oder Brave können es).</div><button class="btn small" id="sync-dl">suchkriterien.json speichern</button>`;
+  if (REMOTE) html = `<div class="state"><span class="dot ok"></span>Deine Filter werden in diesem Browser gespeichert</div>`;
+  el.innerHTML = html;
+  const on = (id, fn) => { const b = document.getElementById(id); if (b) b.onclick = fn; };
+  on("sync-connect", connectFolder); on("sync-perm", () => writeCriteria(true)); on("sync-retry", () => writeCriteria(true)); on("sync-dl", downloadCriteria);
+}
+
+/* ================================================================ rail */
+function buildRail() {
+  const dg = $("#f-districts");
+  dg.innerHTML = Object.keys(DISTRICTS).map(n => `<button data-v="${n}" title="${n}. ${DISTRICTS[n]}" aria-pressed="false">${n}</button>`).join("");
+  dg.onclick = e => { const b = e.target.closest("button"); if (!b) return; const v = +b.dataset.v, s = active(); s.districts = s.districts || []; s.districts = s.districts.includes(v) ? s.districts.filter(x => x !== v) : [...s.districts, v].sort((a, b) => a - b); fillRail(); touchSearch(); };
+  $("#dist-clear").onclick = () => { active().districts = []; fillRail(); touchSearch(); };
+  const numIds = ["rent_min", "rent_max", "ppm2_max", "area_min", "area_max"];
+  numIds.forEach(k => $("#f-" + k).addEventListener("input", e => { const v = e.target.value; active()[k] = v === "" ? null : +v; touchSearch(); }));
+  $("#f-rooms_min").onclick = e => { const b = e.target.closest("button"); if (!b) return; active().rooms_min = b.dataset.v === "" ? null : +b.dataset.v; fillRail(); touchSearch(); };
+  $("#f-furnished").onclick = e => { const b = e.target.closest("button"); if (!b) return; active().furnished = b.dataset.v; fillRail(); touchSearch(); };
+  $("#f-building").onclick = e => { const b = e.target.closest("button"); if (!b) return; const s = active(), v = b.dataset.v; s.building = s.building || []; s.building = s.building.includes(v) ? s.building.filter(x => x !== v) : [...s.building, v]; fillRail(); touchSearch(); };
+  $("#f-outdoor").onchange = e => { active().outdoor = e.target.checked ? "required" : "any"; touchSearch(); };
+  $("#f-elevator").onchange = e => { active().elevator = e.target.checked ? "required" : "any"; touchSearch(); };
+  $("#f-term").onchange = e => { active().term = e.target.checked ? "unbefristet" : "any"; touchSearch(); };
+  $("#f-commission_free").onchange = e => { active().commission_free = e.target.checked; touchSearch(); };
+  $("#f-notify").onchange = e => { active().notify = e.target.checked; touchSearch(); };
+  $("#f-available_by").onchange = e => { active().available_by = e.target.value || null; touchSearch(); };
+  const kw = (id, key) => $(id).addEventListener("input", e => { active()[key] = e.target.value.split(",").map(x => x.trim()).filter(Boolean); touchSearch(); });
+  kw("#f-kw_inc", "keywords_include"); kw("#f-kw_exc", "keywords_exclude");
+  $("#search-select").onchange = e => { S.activeId = e.target.value; store.set("activeSearch", S.activeId); fillRail(); renderResults(); renderCounts(); };
+  $("#search-new").onclick = () => { const c = JSON.parse(JSON.stringify(active())); c.id = "s" + Date.now().toString(36); c.name = active().name + " (Kopie)"; S.searches.push(c); S.activeId = c.id; fillRail(); touchSearch(); $("#search-rename").click(); };
+  $("#search-rename").onclick = () => { $("#rename-row").hidden = false; const i = $("#rename-input"); i.value = active().name; i.focus(); i.select(); };
+  const doRename = () => { const v = $("#rename-input").value.trim(); if (v) { active().name = v; touchSearch(); fillRail(); } $("#rename-row").hidden = true; };
+  $("#rename-ok").onclick = doRename; $("#rename-input").onkeydown = e => { if (e.key === "Enter") doRename(); if (e.key === "Escape") $("#rename-row").hidden = true; };
+  $("#search-del").onclick = () => { if (S.searches.length < 2) { toast("Die letzte Suche kann nicht gelöscht werden."); return; } $("#del-name").textContent = active().name; $("#del-row").hidden = false; };
+  $("#del-no").onclick = () => $("#del-row").hidden = true;
+  $("#del-yes").onclick = () => { S.searches = S.searches.filter(s => s.id !== S.activeId); S.activeId = S.searches[0].id; $("#del-row").hidden = true; S.searches[0].updated = new Date().toISOString(); fillRail(); touchSearch(); };
+  $("#filter-open").onclick = () => $("#rail").classList.add("open");
+  $("#close-rail").onclick = () => $("#rail").classList.remove("open");
+}
+function fillRail() {
+  const s = active();
+  $("#search-select").innerHTML = S.searches.map(x => `<option value="${esc(x.id)}" ${x.id === s.id ? "selected" : ""}>${esc(x.name)}${x.notify ? " 🔔" : ""}</option>`).join("");
+  ["rent_min", "rent_max", "ppm2_max", "area_min", "area_max"].forEach(k => { const el = $("#f-" + k); if (document.activeElement !== el) el.value = s[k] ?? ""; });
+  document.querySelectorAll("#f-rooms_min button").forEach(b => b.setAttribute("aria-pressed", String((b.dataset.v === "" ? null : +b.dataset.v) === (s.rooms_min ?? null))));
+  document.querySelectorAll("#f-furnished button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === (s.furnished || "any"))));
+  document.querySelectorAll("#f-building button").forEach(b => b.setAttribute("aria-pressed", String((s.building || []).includes(b.dataset.v))));
+  document.querySelectorAll("#f-districts button").forEach(b => b.setAttribute("aria-pressed", String((s.districts || []).includes(+b.dataset.v))));
+  $("#dist-sum").textContent = (s.districts || []).length ? s.districts.map(d => d + ". " + DISTRICTS[d]).join(", ") : "Ganz Wien";
+  $("#f-outdoor").checked = s.outdoor === "required";
+  $("#f-elevator").checked = s.elevator === "required";
+  $("#f-term").checked = s.term === "unbefristet";
+  $("#f-commission_free").checked = !!s.commission_free;
+  $("#f-notify").checked = !!s.notify;
+  $("#f-available_by").value = s.available_by || "";
+  if (document.activeElement !== $("#f-kw_inc")) $("#f-kw_inc").value = (s.keywords_include || []).join(", ");
+  if (document.activeElement !== $("#f-kw_exc")) $("#f-kw_exc").value = (s.keywords_exclude || []).join(", ");
+}
+
+/* ================================================================ list views */
+function mark(id) { return S.marks[id] || {}; }
+function setMark(id, patch) { S.marks[id] = Object.assign({}, S.marks[id], patch); store.set("marks", S.marks); }
+function quickText(l) { return (textOf(l) + " " + (l.broker_name || "") + " " + (l.zip || "")).toLowerCase(); }
+function currentList() {
+  const L = S.data.listings || [];
+  const q = S.q.trim().toLowerCase();
+  let out;
+  if (S.view === "favs") out = L.filter(l => mark(l.id).fav);
+  else if (S.view === "hidden") out = L.filter(l => mark(l.id).hidden);
+  else if (S.view === "all") out = L.filter(l => l.status !== "gone" && !mark(l.id).hidden);
+  else out = L.filter(l => !mark(l.id).hidden && matches(l, active()));
+  if (S.onlyNew) out = out.filter(isNew);
+  if (q) out = out.filter(l => quickText(l).includes(q));
+  const k = { new: (a, b) => (b.first_seen || "").localeCompare(a.first_seen || ""),
+    price_asc: (a, b) => (a.rent_total ?? 1e9) - (b.rent_total ?? 1e9), price_desc: (a, b) => (b.rent_total ?? -1) - (a.rent_total ?? -1),
+    ppm_asc: (a, b) => (a.price_per_m2 ?? 1e9) - (b.price_per_m2 ?? 1e9), area_desc: (a, b) => (b.area ?? -1) - (a.area ?? -1) }[S.sort];
+  return out.sort(k);
+}
+const heart = `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3.1 4.5 6.7 4.5c2 0 3.5 1.1 4.3 2.4h2c.8-1.3 2.3-2.4 4.3-2.4 3.6 0 5.8 3.7 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg>`;
+const heartO = `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 20s-7-4.3-9-8.7C1.7 8.1 3.7 5 6.8 5c1.9 0 3.4 1.1 4.2 2.5h2C13.8 6.1 15.3 5 17.2 5c3.1 0 5.1 3.1 3.8 6.3C19 15.7 12 20 12 20z"/></svg>`;
+function pillsFor(l, max) {
+  const p = [];
+  (l.outdoor || []).forEach(o => p.push(`<span class="pill">${esc(OUTDOOR[o.type] || o.type)}${o.area ? " " + fmtNum(o.area) + " m²" : ""}</span>`));
+  if (l.elevator === true) p.push(`<span class="pill">Lift</span>`);
+  if (l.term === "unbefristet") p.push(`<span class="pill ok">unbefristet</span>`);
+  else if (l.term === "befristet") p.push(`<span class="pill warn">befristet${l.term_years ? " " + fmtNum(l.term_years) + " J." : ""}</span>`);
+  if (l.commission_free) p.push(`<span class="pill ok">provisionsfrei</span>`);
+  if (l.building && BUILDING[l.building]) p.push(`<span class="pill">${BUILDING[l.building]}</span>`);
+  if (l.furnished === "yes") p.push(`<span class="pill">möbliert</span>`);
+  return p.slice(0, max).join("");
+}
+function card(l) {
+  const imgs = l.images || [];
+  const m = mark(l.id);
+  const badges = [];
+  if (l.status === "gone") badges.push(`<span class="badge gone">nicht mehr verfügbar</span>`);
+  else if (sinceVisit(l) || isNew(l)) badges.push(`<span class="badge new">neu</span>`);
+  if (l.status === "reserved") badges.push(`<span class="badge res">reserviert</span>`);
+  const facts = [l.area != null ? fmtNum(l.area) + " m²" : null, l.rooms != null ? fmtNum(l.rooms) + " Zi." : null, l.floor || null].filter(Boolean);
+  return `<article class="card${l.status === "gone" ? " is-gone" : ""}" data-id="${esc(l.id)}" tabindex="0">
+    <div class="ph" data-i="0">
+      ${imgs.length ? `<img src="${esc(imgs[0])}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'noimg',textContent:'Foto nicht ladbar'}))">` : `<div class="noimg">kein Foto</div>`}
+      <div class="badges">${badges.join("")}</div>
+      <button class="fav" data-act="fav" aria-pressed="${!!m.fav}" aria-label="Merken">${m.fav ? heart : heartO}</button>
+      ${imgs.length > 1 ? `<button class="nav prev" data-act="prev" aria-label="Vorheriges Foto">‹</button><button class="nav next" data-act="next" aria-label="Nächstes Foto">›</button><span class="ctr num">1/${imgs.length}</span>` : ""}
+    </div>
+    <div class="body">
+      <div class="price"><b>${l.rent_total != null ? fmtEur.format(l.rent_total) : "Miete k. A."}</b><span class="per">gesamt / Monat</span>${l.price_per_m2 ? `<span class="ppm">${fmtEur2.format(l.price_per_m2)}/m²</span>` : ""}</div>
+      <div class="facts">${facts.map(f => `<span>${esc(f)}</span>`).join("")}</div>
+      <span class="sign" title="${esc(l.zip || "")} ${esc(l.district_name || "")}">${esc(signText(l))}</span>
+      <div class="pills">${pillsFor(l, 5)}</div>
+      <div class="title">${esc(l.title || "")}</div>
+      <div class="foot"><span>${esc(l.broker_name || l.broker)}</span><span>${l.status === "gone" ? "entfernt " + ago(l.gone_since) : "gelistet " + ago(l.first_seen)}</span></div>
+    </div>
+  </article>`;
+}
+function renderResults() {
+  const isBrokers = S.view === "brokers";
+  $("#grid").hidden = isBrokers; $("#brokers").hidden = !isBrokers; $("#toolbar").hidden = isBrokers;
+  if (isBrokers) { renderBrokers(); return; }
+  const list = currentList();
+  const label = { matches: `Treffer für „${esc(active().name)}“`, all: "aktive Mietwohnungen", favs: "gemerkt", hidden: "ausgeblendet" }[S.view];
+  $("#count").innerHTML = `${list.length} <small>${label}</small>`;
+  const g = $("#grid");
+  if (!S.data.listings.length) {
+    g.innerHTML = `<div class="empty" style="grid-column:1/-1"><h3>Noch keine Inserate</h3><div>Der erste Abgleich mit den Makler-Webseiten füllt diese Seite. Sie lädt neue Daten alle 5 Minuten selbst nach.</div></div>`;
+    return;
+  }
+  if (!list.length) {
+    const hint = S.view === "matches" ? "Keine aktive Wohnung passt gerade zu dieser Suche. Lockere ein Kriterium links, oder warte auf den nächsten Abgleich." : S.view === "favs" ? "Tippe auf das Herz einer Wohnung, um sie hier zu sammeln." : S.view === "hidden" ? "Ausgeblendete Wohnungen erscheinen hier." : "Keine Wohnungen.";
+    g.innerHTML = `<div class="empty" style="grid-column:1/-1"><h3>Nichts gefunden</h3><div>${hint}</div></div>`;
+    return;
+  }
+  g.innerHTML = list.slice(0, 600).map(card).join("");
+}
+function renderCounts() {
+  const L = S.data.listings || [];
+  const vis = L.filter(l => !mark(l.id).hidden);
+  $("#c-matches").textContent = vis.filter(l => matches(l, active())).length;
+  $("#c-all").textContent = vis.filter(l => l.status !== "gone").length;
+  $("#c-favs").textContent = L.filter(l => mark(l.id).fav).length || "";
+  $("#c-hidden").textContent = L.filter(l => mark(l.id).hidden).length || "";
+  $("#c-brokers").textContent = (S.data.brokers || []).filter(b => b.enabled !== false).length || "";
+}
+function renderStand() {
+  const g = S.data.generated_at, el = $("#stand"), note = $("#stale-note");
+  if (window.WP_DATA_MISSING || !g) { el.textContent = "Noch kein Abgleich"; el.className = "stand"; note.hidden = true; return; }
+  const h = (Date.now() - new Date(g)) / 3600000;
+  el.textContent = `Stand ${fmtTime(g)} (${ago(g)})`;
+  el.className = "stand" + (h > 3 ? " stale" : "");
+  if (h > 3) { note.hidden = false; note.textContent = `Der letzte Abgleich ist ${ago(g)} gelaufen. Stündliche Abgleiche brauchen einen eingeschalteten Mac mit geöffneter Claude-App.`; }
+  else note.hidden = true;
+}
+
+/* ================================================================ brokers view */
+function renderBrokers() {
+  const B = (S.data.brokers || []).slice().sort((a, b) => (b.active_count || 0) - (a.active_count || 0) || String(a.name).localeCompare(b.name, "de"));
+  const ok = B.filter(b => b.enabled !== false && !b.last_error).length;
+  const bad = B.filter(b => b.enabled !== false && b.last_error).length;
+  const runs = (S.data.runs || []).slice(-48);
+  const maxNew = Math.max(1, ...runs.map(r => r.new || 0));
+  const total = (S.data.listings || []).filter(l => l.status !== "gone").length;
+  $("#brokers").innerHTML = `
+    <div style="display:grid;gap:16px">
+      <div class="kpis">
+        <div><b class="num">${B.filter(b => b.enabled !== false).length}</b>Makler überwacht</div>
+        <div><b class="num">${ok}</b>zuletzt fehlerfrei</div>
+        <div><b class="num" style="color:${bad ? "var(--warn)" : "inherit"}">${bad}</b>mit Problemen</div>
+        <div><b class="num">${total}</b>aktive Mietwohnungen</div>
+      </div>
+      ${runs.length ? `<div><div class="lbl" style="margin-bottom:6px">Neue Inserate je Abgleich (letzte ${runs.length})</div><div class="runbars">${runs.map(r => `<i class="${r.brokers_failed > r.brokers_ok ? "fail" : ""}" style="height:${Math.max(4, (r.new || 0) / maxNew * 100)}%" title="${esc(fmtTime(r.at))}: ${r.new || 0} neu, ${r.gone || 0} weg, ${r.brokers_failed || 0} Fehler"></i>`).join("")}</div></div>` : ""}
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Makler</th><th>Software</th><th style="text-align:right">Aktiv</th><th>Letzter Erfolg</th><th>Status</th></tr></thead>
+        <tbody>${B.map(b => `<tr>
+          <td><a href="${esc(b.website)}" target="_blank" rel="noopener">${esc(b.name)}</a></td>
+          <td>${esc(b.platform || "–")}</td>
+          <td class="n">${b.active_count || 0}</td>
+          <td>${b.last_ok ? ago(b.last_ok) : "–"}</td>
+          ${b.enabled === false ? `<td>pausiert</td>` : b.last_error ? `<td class="err"><span class="dot bad" style="display:inline-block;margin-right:6px"></span>${esc(b.last_error)}</td>` : `<td><span class="dot ${b.last_ok ? "ok" : ""}" style="display:inline-block;margin-right:6px"></span>${b.last_ok ? "ok" : "noch nicht abgefragt"}</td>`}
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>`;
+}
+
+/* ================================================================ detail */
+let D = { l: null, i: 0, set: "images" };
+function kvRows(rows) {
+  return `<dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd class="${v == null || v === "" ? "na" : ""}">${v == null || v === "" ? "k. A." : v}</dd>`).join("")}</dl>`;
+}
+function eur(v, d) { return v == null ? null : (d ? fmtEur2 : fmtEur).format(v); }
+function energyBar(val, table, unit) {
+  if (val == null) return "";
+  const cls = classOf(val, table);
+  return `<div class="energy" aria-label="Klasse ${cls}">${HWB_CLASSES.map(([c, , col]) => `<span style="background:${col}" class="${c === cls ? "on" : ""}">${c}</span>`).join("")}</div>`;
+}
+function openDetail(id) {
+  const l = (S.data.listings || []).find(x => x.id === id);
+  if (!l) return;
+  D = { l, i: 0, set: (l.images && l.images.length) ? "images" : "floorplans" };
+  const m = mark(l.id);
+  const dlg = $("#detail");
+  const outdoor = (l.outdoor || []).map(o => `${OUTDOOR[o.type] || o.type}${o.area ? " " + fmtNum(o.area) + " m²" : ""}`).join(", ");
+  const hwbCls = l.hwb_class || classOf(l.hwb, HWB_CLASSES);
+  const fgeeCls = l.fgee_class || classOf(l.fgee, FGEE_CLASSES);
+  const ph = (l.price_history || []).filter(p => p.rent_total != null);
+  dlg.innerHTML = `
+    <button class="d-close" id="d-close" aria-label="Schließen">✕</button>
+    <div class="d-grid">
+      <div class="d-gal">
+        <div>
+          ${(l.floorplans || []).length ? `<div class="gal-tabs"><button data-set="images" aria-pressed="${D.set === "images"}">Fotos (${(l.images || []).length})</button><button data-set="floorplans" aria-pressed="${D.set === "floorplans"}">Grundriss (${l.floorplans.length})</button></div>` : ""}
+          <div class="d-stage" id="d-stage"></div>
+        </div>
+        <div class="thumbs" id="d-thumbs"></div>
+      </div>
+      <div class="d-info">
+        <div class="d-head">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">${l.status === "gone" ? `<span class="badge gone">nicht mehr verfügbar</span>` : isNew(l) ? `<span class="badge new">neu</span>` : ""}${l.status === "reserved" ? `<span class="badge res">reserviert</span>` : ""}</div>
+          <span class="sign big">${esc(signText(l))}</span>
+          <h2 class="d-title">${esc(l.title || "Mietwohnung")}</h2>
+          <div class="d-price"><b>${l.rent_total != null ? fmtEur.format(l.rent_total) : "Miete k. A."}</b><span class="per" style="color:var(--muted)">gesamt / Monat</span></div>
+          <div class="facts">${[l.area != null ? fmtNum(l.area) + " m²" : null, l.rooms != null ? fmtNum(l.rooms) + " Zimmer" : null, l.floor].filter(Boolean).map(f => `<span>${esc(f)}</span>`).join("")}</div>
+          <div class="pills">${pillsFor(l, 12)}</div>
+          <div class="d-actions">
+            ${l.url ? `<a class="btn" href="${esc(l.url)}" target="_blank" rel="noopener">Zum Inserat bei ${esc(l.broker_name || "Makler")} ↗</a>` : ""}
+            <button class="btn ghost" id="d-fav">${m.fav ? "Gemerkt ✓" : "Merken"}</button>
+            <button class="btn ghost" id="d-hide">${m.hidden ? "Wieder einblenden" : "Ausblenden"}</button>
+          </div>
+        </div>
+        ${l.summary ? `<div class="sec"><h3>Kurzbeschreibung</h3><p class="desc">${esc(l.summary)}</p></div>` : ""}
+        <div class="sec"><h3>Kosten</h3>${kvRows([
+          ["Gesamtmiete", eur(l.rent_total, true)], ["Nettomiete", eur(l.rent_net, true)], ["Betriebskosten", eur(l.operating_costs, true)],
+          ["USt.", eur(l.vat, true)], ["Heizkosten", eur(l.heating_costs, true)], ["Sonstige Kosten", eur(l.other_costs, true)], ["€ pro m²", l.price_per_m2 ? fmtEur2.format(l.price_per_m2) : null],
+          ["Kaution", l.deposit_text ? esc(l.deposit_text) + (l.deposit != null ? ` (${eur(l.deposit)})` : "") : eur(l.deposit)],
+          ["Provision", l.commission_free ? "provisionsfrei" : l.commission_text ? esc(l.commission_text) : eur(l.commission)]].concat(l.rent_note ? [["Hinweis", esc(l.rent_note)]] : []))}</div>
+        <div class="sec"><h3>Fläche &amp; Räume</h3>${kvRows([
+          ["Wohnfläche", l.area != null ? fmtNum(l.area) + " m²" : null], ["Zimmer", fmtNum(l.rooms)], ["Schlafzimmer", fmtNum(l.bedrooms, 0)],
+          ["Bad / WC", [l.bathrooms != null ? fmtNum(l.bathrooms, 0) + " Bad" : null, l.toilets != null ? fmtNum(l.toilets, 0) + " WC" : null].filter(Boolean).join(", ")],
+          ["Stockwerk", esc([l.floor, l.floors_total ? "von " + fmtNum(l.floors_total, 0) : null].filter(Boolean).join(" "))], ["Freiflächen", esc(outdoor)]])}</div>
+        <div class="sec"><h3>Gebäude &amp; Ausstattung</h3>${kvRows([
+          ["Bauart", BUILDING[l.building] || null], ["Baujahr", l.year_built ? String(Math.round(l.year_built)) : null], ["Zustand", esc(l.condition)],
+          ["Lift", l.elevator === true ? "ja" : l.elevator === false ? "nein" : null], ["Heizung", esc(l.heating)],
+          ["Möbliert", { yes: "ja", partly: "teilmöbliert", no: "nein" }[l.furnished] || null], ["Küche", l.kitchen === true ? "ja" : l.kitchen === false ? "nein" : null],
+          ["Keller", l.cellar === true ? "ja" : l.cellar === false ? "nein" : null], ["Parken", esc(l.parking)]])}
+          ${(l.features || []).length ? `<div class="pills" style="margin-top:10px">${l.features.map(f => `<span class="pill">${esc(f)}</span>`).join("")}</div>` : ""}</div>
+        <div class="sec"><h3>Energieausweis</h3>${kvRows([["HWB", l.hwb != null ? fmtNum(l.hwb) + " kWh/m²a" + (hwbCls ? " · Klasse " + hwbCls : "") : null], ["fGEE", l.fgee != null ? fmtNum(l.fgee, 2) + (fgeeCls ? " · Klasse " + fgeeCls : "") : null]])}${energyBar(l.hwb, HWB_CLASSES)}</div>
+        <div class="sec"><h3>Verfügbarkeit</h3>${kvRows([["Bezug", esc(l.available_text || fmtDate(l.available_from))], ["Befristung", l.term === "unbefristet" ? "unbefristet" : l.term === "befristet" ? "befristet" + (l.term_years ? " auf " + fmtNum(l.term_years) + " Jahre" : "") : null]])}</div>
+        <div class="sec"><h3>Kontakt</h3><div class="contact">
+          <div><b>${esc(l.broker_name || l.broker)}</b>${l.contact && l.contact.name ? " · " + esc(l.contact.name) : ""}</div>
+          ${l.contact && l.contact.phone ? `<div>Tel. <span class="copy num">${esc(l.contact.phone)}</span></div>` : ""}
+          ${l.contact && l.contact.email ? `<div>E-Mail <span class="copy">${esc(l.contact.email)}</span></div>` : ""}
+          <div class="lbl">Objektnummer ${esc(l.source_id)}</div></div></div>
+        <div class="sec"><h3>Notiz</h3><textarea id="d-note" placeholder="Besichtigung, Fragen, Eindruck …">${esc(m.note || "")}</textarea></div>
+        <div class="sec"><h3>Verlauf</h3><div class="hist">
+          <div>Zuerst gesehen ${fmtDate(l.first_seen)} (${ago(l.first_seen)}) · zuletzt bestätigt ${ago(l.last_seen)}</div>
+          ${ph.length > 1 ? `<div>Mietverlauf: ${ph.map(p => fmtDate(p.at) + " " + fmtEur.format(p.rent_total)).join(" → ")}</div>` : ""}
+          ${l.status === "gone" ? `<div>Beim Makler nicht mehr gelistet seit ${fmtDate(l.gone_since)}</div>` : ""}
+          ${l.data_quality === "partial" ? `<div>Nicht alle Angaben waren auf der Makler-Seite lesbar; Details bitte im Original prüfen.</div>` : ""}
+        </div></div>
+      </div>
+    </div>`;
+  renderGallery();
+  $("#d-close").onclick = () => dlg.close();
+  dlg.querySelectorAll(".gal-tabs button").forEach(b => b.onclick = () => { D.set = b.dataset.set; D.i = 0; dlg.querySelectorAll(".gal-tabs button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderGallery(); });
+  $("#d-fav").onclick = () => { setMark(l.id, { fav: !mark(l.id).fav }); $("#d-fav").textContent = mark(l.id).fav ? "Gemerkt ✓" : "Merken"; renderResults(); renderCounts(); };
+  $("#d-hide").onclick = () => { setMark(l.id, { hidden: !mark(l.id).hidden }); dlg.close(); renderResults(); renderCounts(); toast(mark(l.id).hidden ? "Ausgeblendet" : "Wieder eingeblendet"); };
+  let nt; $("#d-note").oninput = e => { clearTimeout(nt); nt = setTimeout(() => setMark(l.id, { note: e.target.value }), 400); };
+  if (!dlg.open) dlg.showModal();
+  dlg.querySelector(".d-info").scrollTop = 0;
+}
+function renderGallery() {
+  const arr = (D.l[D.set] || []);
+  const st = $("#d-stage"), th = $("#d-thumbs");
+  if (!arr.length) { st.innerHTML = `<div class="noimg" style="position:absolute;inset:0;display:grid;place-items:center;color:#aaa">Keine Fotos</div>`; th.innerHTML = ""; return; }
+  D.i = (D.i + arr.length) % arr.length;
+  st.innerHTML = `<img src="${esc(arr[D.i])}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'noimg',textContent:'Foto nicht ladbar – im Original-Inserat ansehen',style:'position:absolute;inset:0;display:grid;place-items:center;color:#aaa'}))">
+    ${arr.length > 1 ? `<button class="nav prev" aria-label="Vorheriges Foto">‹</button><button class="nav next" aria-label="Nächstes Foto">›</button>` : ""}<span class="ctr">${D.i + 1} / ${arr.length}</span>`;
+  const p = st.querySelector(".prev"), n = st.querySelector(".next");
+  if (p) p.onclick = () => { D.i--; renderGallery(); };
+  if (n) n.onclick = () => { D.i++; renderGallery(); };
+  th.innerHTML = arr.map((u, i) => `<button data-i="${i}" aria-current="${i === D.i}" aria-label="Foto ${i + 1}"><img src="${esc(u)}" alt="" loading="lazy" referrerpolicy="no-referrer"></button>`).join("");
+  th.onclick = e => { const b = e.target.closest("button"); if (b) { D.i = +b.dataset.i; renderGallery(); } };
+  const cur = th.querySelector('[aria-current="true"]'); if (cur) cur.scrollIntoView({ block: "nearest", inline: "nearest" });
+}
+
+/* ================================================================ events */
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => t.hidden = true, 3800); }
+function wire() {
+  document.querySelectorAll(".tab").forEach(t => t.onclick = () => { S.view = t.dataset.view; document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", String(x === t))); renderResults(); });
+  $("#sort").value = S.sort;
+  $("#sort").onchange = e => { S.sort = e.target.value; store.set("sort", S.sort); renderResults(); };
+  $("#only-new").onchange = e => { S.onlyNew = e.target.checked; renderResults(); };
+  let qt; $("#q").oninput = e => { clearTimeout(qt); qt = setTimeout(() => { S.q = e.target.value; renderResults(); }, 150); };
+  $("#grid").addEventListener("click", e => {
+    const c = e.target.closest(".card"); if (!c) return;
+    const act = e.target.closest("[data-act]");
+    const id = c.dataset.id;
+    if (act) {
+      e.stopPropagation();
+      const l = S.data.listings.find(x => x.id === id);
+      if (act.dataset.act === "fav") { setMark(id, { fav: !mark(id).fav }); act.setAttribute("aria-pressed", String(!!mark(id).fav)); act.innerHTML = mark(id).fav ? heart : heartO; renderCounts(); if (S.view === "favs") renderResults(); return; }
+      const ph = c.querySelector(".ph"), imgs = l.images || [];
+      let i = +ph.dataset.i + (act.dataset.act === "next" ? 1 : -1);
+      i = (i + imgs.length) % imgs.length; ph.dataset.i = i;
+      const img = ph.querySelector("img"); if (img) img.src = imgs[i];
+      ph.querySelector(".ctr").textContent = (i + 1) + "/" + imgs.length;
+      return;
+    }
+    openDetail(id);
+  });
+  $("#grid").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.classList.contains("card")) openDetail(e.target.dataset.id); });
+  document.addEventListener("keydown", e => {
+    const dlg = $("#detail"); if (!dlg.open || e.target.tagName === "TEXTAREA") return;
+    if (e.key === "ArrowRight") { D.i++; renderGallery(); } if (e.key === "ArrowLeft") { D.i--; renderGallery(); }
+  });
+  $("#detail").addEventListener("click", e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+  window.addEventListener("beforeunload", () => store.set("lastVisit", new Date().toISOString()));
+  document.addEventListener("visibilitychange", () => { if (document.hidden) store.set("lastVisit", new Date().toISOString()); else reloadData(); });
+}
+function renderAll() { fillRail(); renderStand(); renderCounts(); renderResults(); renderSync(); }
+
+async function start() {
+  if (REMOTE) { try { await fetchRemote(); } catch (e) { window.WP_DATA_MISSING = true; } }
+  ingest(true);
+  buildRail();
+  wire();
+  renderAll();
+  if (!REMOTE) restoreFolder();
+  setInterval(reloadData, 5 * 60 * 1000);
+}
+start();
+setInterval(renderStand, 60 * 1000);
+</script>
+</body>
+</html>
