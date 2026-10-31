@@ -1,0 +1,288 @@
+/* Wohnungsradar – Hilfsfunktionen für den Browser-Agent.
+ * Wird per javascript_tool in die Seite des Maklers geladen: zuerst diesen ganzen Text ausführen,
+ * danach steht window.WR zur Verfügung. Alle Abrufe laufen als fetch() im Kontext der Makler-Seite
+ * (gleiche Domain, kein weiteres Laden der Seite nötig).
+ */
+window.WR = (() => {
+  const clean = s => String(s == null ? "" : s).replace(/\u00ad/g, "").replace(/\s+/g, " ").trim();
+  const abs = (u, base) => { try { return new URL(u, base || location.href).href; } catch (e) { return null; } };
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  async function getDoc(url, init) {
+    const r = await fetch(url, Object.assign({ credentials: "include" }, init || {}));
+    const html = await r.text();
+    return { status: r.status, url: r.url, html, doc: new DOMParser().parseFromString(html, "text/html") };
+  }
+  async function getJSON(url, init) {
+    const r = await fetch(url, Object.assign({ credentials: "include" }, init || {}));
+    return r.json();
+  }
+  async function postJSON(url, body) {
+    return getJSON(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  }
+
+  const RELATED = "[class*='similar'],[class*='Similar'],[class*='related'],[class*='nearby'],[class*='recommend'],[id*='similar'],[id*='related'],footer";
+  function isRelated(e) {
+    if (e.closest && e.closest(RELATED)) return true;
+    const sec = e.closest && e.closest("section,div[class*='section']");
+    const h = sec && sec.querySelector("h2,h3");
+    return !!(h && /ähnliche|similar|in der nähe|weitere (immobilien|objekte|angebote)|das könnte|empfehlungen/i.test(h.textContent || ""));
+  }
+
+  /* Label/Wert-Paare aus einer Detailseite: dl/dt/dd, Tabellen, label/value-Klassen, "Label: Wert"-Zeilen */
+  const NOKV = RELATED + ",[class*='slider'],[class*='Slider'],[class*='carousel'],[class*='swiper'],[class*='top-propert'],[class*='topPropert'],[class*='more-'],[class*='other-'],nav";
+  const skipKv = e => !!(e.closest && e.closest(NOKV)) || isRelated(e);
+  function kv(d, opts) {
+    opts = opts || {};
+    const out = {};
+    const put = (k, v) => {
+      k = clean(k).replace(/[:：]\s*$/, ""); v = clean(v);
+      if (!k || !v || k.length > 70 || v.length > 400 || k === v) return;
+      if (!(k in out)) out[k] = v;
+    };
+    d.querySelectorAll("dl").forEach(dl => dl.querySelectorAll("dt").forEach(dt => {
+      if (skipKv(dt)) return;
+      const dd = dt.nextElementSibling; if (dd && dd.tagName === "DD") put(dt.textContent, dd.textContent);
+    }));
+    d.querySelectorAll("tr").forEach(tr => {
+      if (skipKv(tr)) return;
+      const c = tr.querySelectorAll("th,td"); if (c.length === 2) put(c[0].textContent, c[1].textContent);
+    });
+    d.querySelectorAll("[class*='label'],[class*='Label'],[class*='key'],[class*='name'],[class*='title']").forEach(l => {
+      if (skipKv(l)) return;
+      const v = l.nextElementSibling;
+      if (v && /value|wert|data|content|val|amount|price|text/i.test(v.className || "")) put(l.textContent, v.textContent);
+    });
+    d.querySelectorAll("li,p,div,span,td").forEach(e => {
+      if (e.children.length > 3 || skipKv(e)) return;
+      const t = clean(e.textContent);
+      const m = t.match(/^([A-Za-zÄÖÜäöüß0-9 .\/()+-]{3,45}):\s*(.{1,160})$/);
+      if (m) put(m[1], m[2]);
+    });
+    if (opts.lines) {  // Label und Wert in getrennten Zeilen (z. B. Single-Page-Apps): nur auf live geladenen Seiten
+      const main = d.querySelector("main,article,#content") || d.body;
+      const lines = String(main.innerText || "").split(/\n+/).map(clean).filter(Boolean);
+      for (let i = 0; i < lines.length - 1; i++) {
+        const k = lines[i], v = lines[i + 1];
+        if (k.length <= 40 && v.length <= 80 && k.split(" ").length <= 4 && !/[.!?]$/.test(k) && /^[A-Za-zÄÖÜäöüß][A-Za-zÄÖÜäöüß .\/()-]+$/.test(k) && /\d|ja|nein|yes|no|sofort|befrist|unbefrist|neubau|altbau|gepflegt|saniert/i.test(v) && !(k in out)) out[k] = v;
+      }
+    }
+    return out;
+  }
+
+  /* JSON-LD-Objekte (ohne Breadcrumbs) */
+  function ld(d) {
+    const res = [];
+    d.querySelectorAll('script[type="application/ld+json"]').forEach(s => {
+      try {
+        const j = JSON.parse(s.textContent.replace(/[\u0000-\u001f]+/g, " "));
+        (Array.isArray(j) ? j : [j]).forEach(o => { if (o && o["@type"] !== "BreadcrumbList" && o["@type"] !== "WebPage") res.push(o); });
+      } catch (e) { /* ignore */ }
+    });
+    return res;
+  }
+
+  /* Bildgröße-Varianten zusammenfassen und die größte behalten */
+  const SIZE_RANK = ["fullhd_unbranded", "fullhd", "big2_unbranded", "big2", "big_unbranded", "big", "original", "optimized", "large", "medium_unbranded", "medium"];
+  function imageKey(u) {
+    let k = u.replace(/\?.*$/, "").replace(/@\d+x\d*$/, "");
+    k = k.replace(/\/public\/pic\/[^/]+\//, "/public/pic/*/");
+    k = k.replace(/-\d{2,4}x\d{2,4}(?=\.\w+$)/, "");
+    k = k.replace(/_(thumbnail|optimized|small|medium|large|big|hd|xl|thumb)(?=\.\w+$)/i, "");
+    k = k.replace(/\/(thumbnail|optimized|thumb|small|medium|large)\//i, "/*/");
+    return k.replace(/\.(jpe?g|png|webp|jfif|avif)$/i, "");
+  }
+  function sizeScore(u) {
+    const l = u.toLowerCase();
+    const at = l.match(/@(\d+)x\d*$/); if (at) return Math.min(98, 20 + parseInt(at[1], 10) / 40);
+    if (/image\.onoffice\.de/.test(l)) return 99;
+    for (let i = 0; i < SIZE_RANK.length; i++) if (l.includes("/" + SIZE_RANK[i] + "/") || l.includes("_" + SIZE_RANK[i] + ".")) return 100 - i;
+    if (/-\d{2,4}x\d{2,4}\.\w+$/.test(l) || /thumb/.test(l)) return 1;
+    return 50;
+  }
+  function images(d, base, opts) {
+    opts = opts || {};
+    const urls = [], planUrls = new Set();
+    const root = (opts.scope && d.querySelector(opts.scope)) || d;
+    const PERSON = "[class*='contact'],[class*='Contact'],[class*='agent'],[class*='ansprech'],[class*='Ansprech'],[class*='makler'],[class*='broker'],[class*='person'],[class*='team'],[class*='employee'],[class*='berater'],[class*='author']";
+    const PLAN = /grundriss|floor ?plan|floorplan|lageplan|\bplan\b/i;
+    root.querySelectorAll("img,source,a,[data-src],[data-bg],[data-image],[style]").forEach(e => {
+      if (!opts.scope && isRelated(e)) return;
+      if (e.closest && e.closest(PERSON)) return;
+      const fig = e.closest && e.closest("figure,[class*='caption'],[class*='slide'],li");
+      const cap = [e.getAttribute("alt"), e.getAttribute("title"), e.getAttribute("data-caption"), e.getAttribute("data-title"), e.getAttribute("aria-label"),
+        fig && fig.querySelector && (fig.querySelector("figcaption,[class*='caption']") || {}).textContent].filter(Boolean).join(" ");
+      const before = urls.length;
+      const cand = ["src", "data-src", "data-lazy-src", "data-original", "data-full", "data-zoom-image", "data-image", "data-bg", "data-large"]
+        .map(a => e.getAttribute(a));
+      if (e.tagName === "A") cand.push(e.getAttribute("href"));
+      ["srcset", "data-srcset"].forEach(a => {
+        const s = e.getAttribute(a);
+        if (s) s.split(",").forEach(p => cand.push(p.trim().split(/\s+/)[0]));
+      });
+      const st = e.getAttribute("style");
+      if (st) { const m = st.match(/url\(['"]?([^'")]+)/); if (m) cand.push(m[1]); }
+      cand.forEach(c => { if (!c) return; const u = abs(c, base); if (u && /\.(jpe?g|png|webp|jfif|avif)(\?|@|$)/i.test(u)) urls.push(u); });
+      if (cap && PLAN.test(cap)) urls.slice(before).forEach(u => planUrls.add(imageKey(u)));
+    });
+    const og = d.querySelector('meta[property="og:image"]'); if (og && og.content && !opts.scope) urls.unshift(abs(og.content, base));
+    if (opts.rawScan) { const html = d.documentElement.outerHTML; (html.match(/https?:\/\/[^"'\s)<>]+?\.(?:jpe?g|png|webp|jfif)(?:@\d+x\d*)?/gi) || []).forEach(u => urls.push(u)); }
+    let list = [...new Set(urls)].filter(u => !/(logo|icon|sprite|avatar|favicon|\/team|mitarbeiter|portrait|placeholder|flag|badge|award|siegel|google|facebook|whatsapp|qr-?code|energieausweis-skala)/i.test(u));
+    if (opts.include) list = list.filter(u => opts.include.test(u));
+    if (opts.exclude) list = list.filter(u => !opts.exclude.test(u));
+    const best = new Map(), order = [];
+    list.forEach(u => { const k = imageKey(u); if (!best.has(k)) { best.set(k, u); order.push(k); } else if (sizeScore(u) > sizeScore(best.get(k))) best.set(k, u); });
+    const all = order.map(k => best.get(k));
+    const isPlan = u => planUrls.has(imageKey(u)) || /(grundriss|floor.?plan|layout-|\/plan|_plan|-plan|lageplan)/i.test(u);
+    return { images: all.filter(u => !isPlan(u)), floorplans: all.filter(isPlan) };
+  }
+
+  /* Koordinaten aus data-lat/data-lng (Kartenelemente) */
+  function geo(d) {
+    const e = d.querySelector("[data-lat][data-lng],[data-lat][data-lon],[data-latitude][data-longitude],[data-lat][data-long]");
+    if (!e) return null;
+    const lat = parseFloat(e.getAttribute("data-lat") || e.getAttribute("data-latitude"));
+    const lng = parseFloat(e.getAttribute("data-lng") || e.getAttribute("data-lon") || e.getAttribute("data-long") || e.getAttribute("data-longitude"));
+    return (lat > 47.9 && lat < 48.4 && lng > 16.1 && lng < 16.7) ? { lat, lng } : null;
+  }
+
+  function text(d, max) {
+    const main = d.querySelector("main,article,[class*='description'],[class*='beschreibung'],#content") || d.body;
+    const clone = main.cloneNode(true);
+    clone.querySelectorAll("script,style,noscript,nav,header,footer,form," + RELATED).forEach(x => x.remove());
+    return clean(clone.textContent).slice(0, max || 2500);
+  }
+
+  /* Komplette Detailseite in kompakte Rohdaten verwandeln */
+  async function detail(url, opts) {
+    const r = await getDoc(url);
+    if (r.status >= 400) return { url, status: r.status, gone: true };
+    const d = r.doc;
+    const title = clean((d.querySelector("h1") || {}).textContent || (d.querySelector("title") || {}).textContent);
+    const im = images(d, r.url, opts || {});
+    return { url: r.url, status: r.status, title, kv: kv(d), ld: ld(d), geo: geo(d), images: im.images.slice(0, 60), floorplans: im.floorplans.slice(0, 10), text: text(d, (opts && opts.textMax) || 2000) };
+  }
+  async function details(urls, opts) {
+    const out = [];
+    for (const u of urls) {
+      try { out.push(await detail(u, opts)); } catch (e) { out.push({ url: u, error: String(e) }); }
+      await sleep((opts && opts.pauseMs) || 400);
+    }
+    return out;
+  }
+
+  /* Hilfen für Listen */
+  function links(d, re, base) {
+    return [...new Set([...d.querySelectorAll("a[href]")].map(a => abs(a.getAttribute("href"), base)).filter(h => h && re.test(h)).map(h => h.split("#")[0]))];
+  }
+  function cardText(a) {
+    const c = a.closest("article,li,.card,[class*='item'],[class*='property'],[class*='object'],[class*='teaser'],[class*='result']") || a;
+    return clean(c.textContent).slice(0, 400);
+  }
+  const isViennaZip = z => /^1(0[1-9]|1\d|2[0-3])0$/.test(String(z || "").trim());
+  const num = s => { if (s == null) return null; let t = String(s).replace(/\s*(m²|m2|m\^2|qm)\b/gi, " ").replace(/²/g, "").replace(/[^\d,.-]/g, ""); if (!t) return null;
+    if (t.includes(",") && t.includes(".")) t = t.lastIndexOf(",") > t.lastIndexOf(".") ? t.replace(/\./g, "").replace(",", ".") : t.replace(/,/g, "");
+    else if (t.includes(",")) t = t.replace(",", "."); else if ((t.match(/\./g) || []).length > 1 || /\.\d{3}$/.test(t)) t = t.replace(/\./g, "");
+    const n = parseFloat(t); return isNaN(n) ? null : n; };
+
+  /* Rohdaten einer Detailseite (kv, ld, images, text) in das Portal-Schema übersetzen.
+   * Ergebnis ist ein Vorschlag: der Agent prüft ihn, ergänzt summary und entscheidet Grenzfälle. */
+  const MAP = [
+    ["rent_total", /^(gesamtmiete|bruttomiete|gesamtbelastung|monatl(\.|iche)? gesamt|gesamtkosten|miete gesamt|monatliche miete gesamt|gesamtmiete brutto|total rent|preis$|price$)/],
+    ["rent_net", /^(hauptmiet(?!.*inkl)|nettomiete|miete netto|miete exkl|miete \(netto|kaltmiete|net rent|miete$)/],
+    ["operating_costs", /^(betriebskosten(?!.*inkl)|bk\b|nebenkosten$|operating costs)/],
+    ["vat", /^(ust|mwst|umsatzsteuer|ust\. gesamt)/],
+    ["heating_costs", /^(heizkosten( netto)?|heiz- und warmwasser|heating costs)/],
+    ["other_costs", /^(sonstige kosten( netto)?|weitere kosten|sonstige nebenkosten|liftkosten|lift netto)/],
+    ["deposit_text", /^kaution/],
+    ["commission_text", /^(provision|maklerprovision|vermittlungsprovision|(käufer-?\s*\/?\s*)?mieter-?provision|provision mieter)/],
+    ["area", /^(wohnfläche|wohnflaeche|wohnnutzfläche|flat size|living (area|space))/],
+    ["usable_area", /^(nutzfläche|fläche$|gesamtfläche)/],
+    ["rooms", /^(zimmer|anzahl zimmer|zimmeranzahl|räume|rooms)$/],
+    ["bedrooms", /^schlafzimmer/],
+    ["bathrooms", /^((anzahl )?(bad|bäder|badezimmer)|badezimmer anzahl)$/],
+    ["toilets", /^((anzahl )?(wcs?|toiletten?|separate[sn]? wc))$/],
+    ["floor", /^(stockwerk|etage|geschoss|lage im haus|stock|etage d(\.|es)? objekts|etage des objektes)$/],
+    ["floors_total", /^(anzahl (der )?(geschosse|stockwerke|etagen)|etagen gesamt)/],
+    ["elevator", /^(lift|aufzug|fahrstuhl|personenaufzug|elevator)(?!kosten)/],
+    ["year_built", /^(baujahr|year built|year of construction)/],
+    ["condition", /^(zustand|objektzustand)/],
+    ["building_text", /^(bauart|bautyp|objekttyp|art des gebäudes|gebäudeart|building type)/],
+    ["heating", /^(heizung|heizungsart|befeuerung|wärmeversorgung|energieträger)/],
+    ["hwb_class", /^(klasse hwb|hwb-klasse|hwb klasse|energieklasse$|energy class)/],
+    ["hwb_text", /^(hwb|heizwärmebedarf|energieklasse \/ heizwärmebedarf)/],
+    ["fgee_class", /^(klasse fgee|fgee-klasse|fgee klasse|gee-klasse|klasse f-gee)/],
+    ["fgee_text", /^(fgee|f-gee|f gee|gesamtenergieeffizienz)/],
+    ["available_text", /^(verfügbar ab|verfügbar|beziehbar|bezugsfertig|frei ab|bezug)/],
+    ["term_text", /^(befristung|befristet|mietdauer|maximale mietdauer|vertragsdauer|maximalmietdauer)/],
+    ["zip", /^(plz|postleitzahl)$/],
+    ["street", /^(straße|strasse|adresse)$/],
+    ["furnished_text", /^(möbliert|möblierung|einrichtung)/],
+    ["kitchen_text", /^küche/],
+    ["cellar_text", /^(keller|kellerabteil|kellerfläche)/],
+    ["parking", /^(stellplatz|garage|parken|tiefgarage)/],
+    ["source_ref", /^(objektnummer|objekt nr|objekt-nr|obj\.-nr|immonr|immo nr|objekt-id|id)\.?$/],
+    ["deal_text", /^(vermarktungsart|vermarktung|angebotsart)/],
+    ["type_text", /^(objektart|immobilienart|typ)$/],
+  ];
+  const OUTDOOR = [["dachterrasse", /dachterrasse/], ["terrasse", /terr?ass/], ["loggia", /loggia/], ["balkon", /balkon/], ["garten", /garten/], ["wintergarten", /wintergarten/]];
+  function normalize(raw, extra) {
+    const kvs = raw.kv || {}, L = {}, outdoor = [];
+    for (const [label, value] of Object.entries(kvs)) {
+      const l = label.toLowerCase().replace(/\s+/g, " ").trim();
+      for (const [field, re] of MAP) { if (re.test(l) && !(field in L)) { L[field] = value; break; } }
+      for (const [t, re] of OUTDOOR) { if (re.test(l) && /m²|m2|\d/.test(value) && !/ausrichtung/.test(l)) { const a = num((value.match(/([\d.,]+)\s*m/) || [])[1]); if (!outdoor.some(o => o.type === t)) outdoor.push({ type: t, area: a }); break; } }
+    }
+    const ldo = (raw.ld || []).find(o => o.address || o.geo || o.latitude) || {};
+    const addr = ldo.address || {};
+    const text = (raw.text || "").toLowerCase();
+    const NOLIFT = /(kein(en)?|ohne)\s+(personen)?(aufzug|lift)|(aufzug|lift)\s*(ist )?(nicht vorhanden|: nein|nein)/i;
+    const yes = v => v != null && /^(ja|yes|vorhanden|personenaufzug|lift|aufzug|1|true)/i.test(String(v).trim());
+    const termText = L.term_text || (text.match(/(befristet auf \d+ jahre|unbefristet|befristung[^.]{0,40})/) || [])[0] || null;
+    const hwbNum = num((String(L.hwb_text || "").match(/([\d.,]+)\s*kwh/i) || String(L.hwb_text || "").match(/([\d.,]+)/) || [])[1]);
+    const out = {
+      source_id: extra && extra.source_id, url: raw.url, title: raw.title || null,
+      rent_total: num(L.rent_total), rent_net: num(L.rent_net), operating_costs: num(L.operating_costs), vat: num(L.vat), heating_costs: num(L.heating_costs), other_costs: num(L.other_costs),
+      deposit: /€|eur/i.test(L.deposit_text || "") ? num(L.deposit_text) : null, deposit_text: L.deposit_text || null,
+      commission_text: L.commission_text || null,
+      commission_free: L.commission_text ? /provisionsfrei|keine provision|abgeber (bezahlt|zahlt)|erstauftraggeber|0,00|^0\s*€?$/i.test(L.commission_text) : null,
+      area: num(L.area) || num(L.usable_area), rooms: num(L.rooms), bedrooms: num(L.bedrooms), bathrooms: num(L.bathrooms), toilets: num(L.toilets),
+      floor: L.floor || null, floors_total: num(L.floors_total), outdoor,
+      elevator: L.elevator != null ? (NOLIFT.test(L.elevator) || /^(nein|no|-|nicht)/i.test(L.elevator.trim()) ? false : (yes(L.elevator) || /aufzug|lift/i.test(L.elevator)))
+        : (NOLIFT.test(text) ? false : /(personen)?aufzug|\blift\b/.test(text) ? true : null),
+      year_built: num(L.year_built), condition: L.condition || null,
+      building: /altbau/i.test((L.building_text || "") + " " + (L.condition || "")) ? "altbau" : /erstbezug/i.test((L.condition || "") + " " + (raw.title || "")) ? "erstbezug" : /neubau/i.test(L.building_text || "") ? "neubau" : null,
+      heating: L.heating || null, hwb: hwbNum, hwb_class: L.hwb_class || (String(L.hwb_text || "").match(/\b(A\+\+|A\+|[A-G])\b/) || [])[1] || null,
+      fgee: num(L.fgee_text), fgee_class: L.fgee_class || null,
+      available_text: L.available_text || null,
+      term: termText ? (/unbefrist/i.test(termText) ? "unbefristet" : "befristet") : null,
+      term_years: termText ? num((termText.match(/(\d+)\s*jahr/i) || [])[1]) : null,
+      zip: L.zip || addr.postalCode || null, street: L.street || addr.streetAddress || null,
+      lat: ldo.latitude || (ldo.geo && ldo.geo.latitude) || (raw.geo && raw.geo.lat) || null, lng: ldo.longitude || (ldo.geo && ldo.geo.longitude) || (raw.geo && raw.geo.lng) || null,
+      furnished: L.furnished_text ? (/teil/i.test(L.furnished_text) ? "partly" : yes(L.furnished_text) ? "yes" : /nein|unmöbl/i.test(L.furnished_text) ? "no" : null) : null,
+      kitchen: L.kitchen_text ? !/nicht|keine/i.test(L.kitchen_text) : null, cellar: L.cellar_text ? !/nein|kein/i.test(L.cellar_text) : null,
+      parking: L.parking || null,
+      images: raw.images || [], floorplans: raw.floorplans || [],
+      _deal: L.deal_text || null, _type: L.type_text || null, _source_ref: L.source_ref || null,
+      _text: (raw.text || "").slice(0, 900),
+    };
+    if (!out.zip) { const m = (raw.title + " " + (raw.text || "")).match(/\b(1(?:0[1-9]|1\d|2[0-3])0)\s*Wien/); if (m) out.zip = m[1]; }
+    return Object.assign(out, extra || {});
+  }
+  async function detailsNormalized(items, opts) {
+    const out = [];
+    for (const it of items) {
+      try { const raw = await detail(it.url, opts); out.push(raw.gone ? { source_id: it.source_id, url: it.url, gone: true } : normalize(raw, { source_id: it.source_id })); }
+      catch (e) { out.push({ source_id: it.source_id, url: it.url, error: String(e) }); }
+      await sleep((opts && opts.pauseMs) || 400);
+    }
+    return out;
+  }
+  function liveDetail(opts) {
+    const im = images(document, location.href, opts || {});
+    return { url: location.href, title: clean((document.querySelector("h1") || {}).innerText || document.title), kv: kv(document, { lines: true }), ld: ld(document), geo: geo(document), images: im.images.slice(0, 60), floorplans: im.floorplans.slice(0, 10), text: text(document, (opts && opts.textMax) || 2000) };
+  }
+
+  return { clean, abs, sleep, getDoc, getJSON, postJSON, kv, ld, geo, images, text, detail, details, detailsNormalized, normalize, liveDetail, links, cardText, isViennaZip, num, version: "1.4" };
+})();
+"WR " + window.WR.version + " geladen";

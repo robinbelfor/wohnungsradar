@@ -1,0 +1,5 @@
+plan/
+data/known.json
+inbox/current/
+tools/__pycache__/
+data/listings.js

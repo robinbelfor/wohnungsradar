@@ -1,0 +1,6 @@
+{"at": "2026-10-29T17:47:24Z", "run_id": "init", "files": 10, "brokers_ok": 29, "brokers_failed": 11, "new": 0, "imported": 61, "pending": 290, "changed": 0, "gone": 0, "matches": 0, "active_total": 61}
+{"at": "2026-10-29T18:48:45Z", "run_id": "browserinit", "files": 1, "brokers_ok": 3, "brokers_failed": 0, "new": 0, "imported": 20, "pending": 290, "changed": 0, "gone": 0, "matches": 0, "active_total": 81}
+{"at": "2026-10-29T19:10:51Z", "run_id": "browserinit", "files": 1, "brokers_ok": 3, "brokers_failed": 0, "new": 40, "imported": 63, "pending": 505, "changed": 0, "gone": 0, "matches": 36, "active_total": 184}
+{"at": "2026-10-29T20:38:47Z", "run_id": "2026102920", "files": 11, "brokers_ok": 30, "brokers_failed": 12, "new": 0, "imported": 159, "pending": 500, "changed": 0, "gone": 0, "matches": 0, "active_total": 343}
+{"at": "2026-10-31T09:44:35Z", "run_id": "2026103109", "files": 9, "brokers_ok": 36, "brokers_failed": 3, "new": 22, "imported": 136, "pending": 501, "changed": 1, "gone": 0, "matches": 17, "active_total": 501}
+{"at": "2026-10-31T15:20:18Z", "run_id": "2026103114", "files": 9, "brokers_ok": 36, "brokers_failed": 3, "new": 0, "imported": 103, "pending": 470, "changed": 0, "gone": 2, "matches": 0, "active_total": 602}
